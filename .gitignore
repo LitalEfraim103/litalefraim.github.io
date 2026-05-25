@@ -27,6 +27,11 @@ ChatGPT Image*.png
 *.py
 slides_data.json
 
+# Video files
+*.mp4
+*.mov
+*.avi
+
 # Windows temp files
 ~$*
 Thumbs.db
