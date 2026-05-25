@@ -400,8 +400,8 @@
     <div style="display:flex;align-items:center;gap:0.75rem">
       <a href="index.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark');localStorage.setItem('scrollY',window.scrollY);localStorage.setItem('scrollYTime',Date.now());localStorage.setItem('zoomIdx',currentZoomIdx)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span data-i="themeToggle">מצב כהה</span></a>
       <div class="zoom-toggle" title="גודל טקסט">
-        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט">א−</button>
-        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט">א+</button>
+        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט" data-i="zoomOut">א−</button>
+        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט" data-i="zoomIn">א+</button>
       </div>
       <div class="lang-toggle">
         <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
@@ -509,8 +509,8 @@
 
   <script>
   // ── FONT ZOOM ──
-  const ZOOM_STEPS = [85, 100, 115];
-  let currentZoomIdx = 1;
+  const ZOOM_STEPS = [75, 88, 100, 113, 130];
+  let currentZoomIdx = 2;
 
   function applyZoom(idx) {
     currentZoomIdx = Math.max(0, Math.min(ZOOM_STEPS.length - 1, idx));
@@ -529,7 +529,7 @@
       pageTitle:'ליטל אפרים | הדרך מתחילה בדיוק',
       heroName:'ליטל אפרים', heroTagline:'הדרך מתחילה בדיוק',
       'nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
-      themeToggle:'מצב כהה',
+      themeToggle:'מצב כהה', zoomOut:'א−', zoomIn:'א+',
       pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'קרא עוד ›',
       pillLec:'הרצאות', pillTech:'ייעוץ וטכנולוגיה',
       gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול',
@@ -556,7 +556,7 @@
       pageTitle:'Lital Efraim | The Journey Begins with Precision',
       heroName:'Lital Efraim', heroTagline:'The Journey Begins with Precision',
       'nav-about':'About Me','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
-      themeToggle:'Dark Mode',
+      themeToggle:'Dark Mode', zoomOut:'a−', zoomIn:'a+',
       pillAbout:'About Me', gwAboutTitle:'Behind the Compass', gwAboutBody:'Lital Efraim, nice to meet you! My work moves between two complementary poles: research and algorithmic thinking in the Spatial AI world, alongside deep mental resilience born from a life journey and daily coping with personal complexity.', gwAboutCta:'Read more ›',
       pillLec:'Lectures', pillTech:'Consulting & Technology',
       gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists',
