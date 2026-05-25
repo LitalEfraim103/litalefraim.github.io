@@ -281,7 +281,7 @@
       <li><a href="#contact" data-i="nav-contact">צור קשר</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:0.75rem">
-      <a href="index.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark')">
+      <a href="about.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark')">
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <span data-i="themeToggle">מצב כהה</span>
       </a>
@@ -488,9 +488,9 @@
   });
 
   function openModal(subject) {
+    document.getElementById('contactForm').reset();
     document.getElementById('formSubject').value = subject || 'פנייה מהאתר';
     document.getElementById('formStatus').className = 'form-status';
-    document.getElementById('contactForm').reset();
     document.getElementById('contactModal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -500,6 +500,30 @@
     e.preventDefault();
     const btn = document.getElementById('formSubmitBtn');
     const status = document.getElementById('formStatus');
+    status.className = 'form-status';
+
+    // ── ולידציה: טלפון (אם הוזן) ──
+    const phoneEl = e.target.querySelector('[name="phone"]');
+    const phoneVal = phoneEl ? phoneEl.value.trim() : '';
+    if (phoneVal) {
+      const digits = phoneVal.replace(/[\s\-\+\(\)]/g, '');
+      if (!/^(972[0-9]{9}|0[0-9]{8,9})$/.test(digits)) {
+        status.className = 'form-status error';
+        status.textContent = 'מספר הטלפון אינו תקין — נא להזין מספר ישראלי (לדוגמה: 050-1234567)';
+        phoneEl.focus();
+        return;
+      }
+    }
+
+    // ── ולידציה: תוכן הודעה ──
+    const msgEl = e.target.querySelector('[name="message"]');
+    if (msgEl && msgEl.value.trim().length < 2) {
+      status.className = 'form-status error';
+      status.textContent = 'נא לכתוב הודעה קצרה — במה אוכל לעזור?';
+      msgEl.focus();
+      return;
+    }
+
     btn.disabled = true; btn.textContent = 'שולח...';
     try {
       const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(e.target) });

@@ -154,8 +154,8 @@
 
     /* ── GATEWAY ── */
     .gateway { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 880px; margin: 0 auto; }
-    [dir="rtl"] .gw-lectures { order: 2; }
-    [dir="rtl"] .gw-tech    { order: 1; }
+    [dir="rtl"] .gw-lectures { order: 1; }
+    [dir="rtl"] .gw-tech    { order: 2; }
 
     .gateway-card {
       position: relative; padding: 2.5rem 2rem 2.25rem; border-radius: 20px;
@@ -198,7 +198,7 @@
     .gw-lectures .card-heading { color: var(--wine); }
     .gw-tech .card-heading     { color: var(--teal-dark); }
 
-    .card-body { font-size: 0.875rem; color: var(--gray); line-height: 1.75; margin-bottom: 1.75rem; }
+    .card-body { font-size: 0.95rem; color: var(--gray); line-height: 1.75; margin-bottom: 1.75rem; }
     .card-cta {
       display: inline-flex; align-items: center; gap: 0.45rem;
       font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
@@ -243,7 +243,7 @@
     .value-card:nth-child(1) .value-title { color: var(--turquoise); }
     .value-card:nth-child(2) .value-title { color: var(--beige); }
     .value-card:nth-child(3) .value-title { color: var(--wine); }
-    .value-text  { font-size: 0.85rem; color: var(--gray-dim); line-height: 1.75; }
+    .value-text  { font-size: 0.925rem; color: var(--gray-dim); line-height: 1.75; }
 
     /* ── CONTACT ── */
     #contact { background: linear-gradient(180deg, var(--base) 0%, var(--surface) 100%); padding: 6rem 2rem; text-align: center; }
@@ -369,7 +369,6 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <button class="close-btn" onclick="toggleMenu()">✕</button>
-    <a href="#explore"              data-i="nav-explore">גלה</a>
     <a href="about-light.html"     data-i="nav-about">מי אני</a>
     <a href="lectures-light.html"  data-i="nav-lectures">חוסן והשראה</a>
     <a href="technology-light.html" data-i="nav-tech">ייעוץ וטכנולוגיה</a>
@@ -381,7 +380,6 @@
       <img id="navLogo" src="LOGO_HE_T.png" alt="ליטל אפרים" />
     </a>
     <ul class="nav-links">
-      <li><a href="#explore"              data-i="nav-explore">גלה</a></li>
       <li><a href="about-light.html"     data-i="nav-about">מי אני</a></li>
       <li><a href="lectures-light.html"  data-i="nav-lectures">חוסן והשראה</a></li>
       <li><a href="technology-light.html" data-i="nav-tech">ייעוץ וטכנולוגיה</a></li>
@@ -455,13 +453,11 @@
         <span class="card-pill" data-i="pillLec">הרצאות</span>
         <h2 class="card-heading" data-i="gwLecTitle">חוסן והשראה</h2>
         <p class="card-body" data-i="gwLecBody">הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול</p>
-        <span class="card-cta" data-i="gwLecCta">גלה עוד ›</span>
       </a>
       <a href="technology-light.html" class="gateway-card gw-tech fade-up">
         <span class="card-pill" data-i="pillTech">ייעוץ וטכנולוגיה</span>
         <h2 class="card-heading" data-i="gwTechTitle">ייעוץ וטכנולוגיה</h2>
         <p class="card-body" data-i="gwTechBody">מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים לתעשייה</p>
-        <span class="card-cta" data-i="gwTechCta">גלה עוד ›</span>
       </a>
     </div>
   </section>
@@ -500,12 +496,12 @@
       dir:'rtl', lang:'he', logo:'LOGO_HE_T.png',
       pageTitle:'ליטל אפרים | הדרך מתחילה בדיוק',
       heroName:'ליטל אפרים', heroTagline:'הדרך מתחילה בדיוק',
-      'nav-explore':'גלה','nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
+      'nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
       themeToggle:'מצב כהה',
       pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'קרא עוד ›',
       pillLec:'הרצאות', pillTech:'ייעוץ וטכנולוגיה',
-      gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול', gwLecCta:'גלה עוד ›',
-      gwTechTitle:'ייעוץ וטכנולוגיה', gwTechBody:'מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים', gwTechCta:'גלה עוד ›',
+      gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול',
+      gwTechTitle:'ייעוץ וטכנולוגיה', gwTechBody:'מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים',
       scrollHint:'גלול למטה',
       val1T:'דיוק', val1X:'מחויבות חסרת פשרות לנתונים הנדסיים מוחלטים והבחנה דקה ורגישה של צרכי הנפש',
       val2T:'ניווט', val2X:'יצירת נתיב וסדר בתוך מרחבים מורכבים — גיאוגרפיים ורגשיים כאחד',
@@ -517,12 +513,12 @@
       dir:'ltr', lang:'en', logo:'LOGO_EN_T.png',
       pageTitle:'Lital Efraim | The Journey Begins with Precision',
       heroName:'Lital Efraim', heroTagline:'The Journey Begins with Precision',
-      'nav-explore':'Explore','nav-about':'About','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
+      'nav-about':'About','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
       themeToggle:'Dark Mode',
       pillAbout:'About', gwAboutTitle:'Behind the Compass', gwAboutBody:'Lital Efraim, nice to meet you! My work moves between two complementary poles: research and algorithmic thinking in the Spatial AI world, alongside deep mental resilience born from a life journey and daily coping with personal complexity.', gwAboutCta:'Read more ›',
       pillLec:'Lectures', pillTech:'Consulting & Technology',
-      gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists', gwLecCta:'Explore ›',
-      gwTechTitle:'Consulting & Technology', gwTechBody:'Geographic mapping, AI, computer vision and spatial data processing for industry', gwTechCta:'Explore ›',
+      gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists',
+      gwTechTitle:'Consulting & Technology', gwTechBody:'Geographic mapping, AI, computer vision and spatial data processing for industry',
       scrollHint:'Scroll down',
       val1T:'Precision', val1X:'Uncompromising commitment to absolute engineering data and nuanced understanding of human needs',
       val2T:'Navigation', val2X:'Creating pathways and order within complex spaces — geographic and emotional alike',
