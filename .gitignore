@@ -8,6 +8,16 @@ Archive/
 dark_version/
 הרצאות/
 
+# Unused / source images (only LOGO_HE_T.png and LOGO_EN_T.png are used)
+LOGO.png
+LOGO_ENGLISH.png
+LOGO_HEBREW.png
+LOGO_Transperancy.png
+lital_efraim_english.png
+lital_efraim_english_upscaled_4096.png
+lital_efraim_hebrew_upscaled_4096.png
+ChatGPT Image*.png
+
 # Office documents (not needed on website)
 *.docx
 *.pptx
