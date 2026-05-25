@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -229,6 +229,35 @@
     .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
     .fade-up.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── ENGLISH COMING SOON ── */
+    #en-coming-soon {
+      display: none;
+      padding: 6rem 2rem 8rem;
+      text-align: center;
+      background: var(--base);
+    }
+    .en-cs-inner { max-width: 640px; margin: 0 auto; }
+    .en-cs-icon { font-size: 3.2rem; margin-bottom: 1.5rem; }
+    .en-cs-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900;
+      color: var(--wine); margin-bottom: 0.85rem; line-height: 1.2;
+    }
+    .en-cs-subtitle {
+      font-size: 1rem; color: var(--beige); font-weight: 400;
+      letter-spacing: 0.1em; margin-bottom: 2rem; opacity: 0.85;
+    }
+    .en-cs-divider {
+      width: 48px; height: 2px; margin: 0 auto 2rem;
+      background: linear-gradient(90deg, var(--wine-deep), var(--wine-rose), var(--wine-deep));
+      border-radius: 2px;
+    }
+    .en-cs-text {
+      font-size: 1.02rem; color: var(--gray); line-height: 1.9;
+      margin-bottom: 2.5rem;
+    }
+    .en-cs-text strong { color: var(--text); font-weight: 600; }
+    .en-cs-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
     @media (max-width: 820px) {
       .page-hero-inner { grid-template-columns: 1fr; }
       .page-hero-logo { display: none; }
@@ -310,8 +339,38 @@
   </header>
 
   <main>
-    <div class="content-center">
-      <div class="lectures-grid" id="lecturesGrid"></div>
+    <div id="lecturesWrapper">
+      <div class="content-center">
+        <div class="lectures-grid" id="lecturesGrid"></div>
+      </div>
+    </div>
+
+    <!-- ENGLISH COMING SOON -->
+    <div id="en-coming-soon">
+      <div class="en-cs-inner">
+        <div class="en-cs-icon">🌍</div>
+        <h2 class="en-cs-title">Coming Soon in English</h2>
+        <p class="en-cs-subtitle">תוכן בדרך &nbsp;·&nbsp; Great things are on the way</p>
+        <div class="en-cs-divider"></div>
+        <p class="en-cs-text">
+          Lital's <strong>Resilience &amp; Inspiration</strong> lectures are currently available in Hebrew only.<br><br>
+          These talks — drawn from deeply personal lived experience — are being carefully adapted
+          for English-speaking audiences. We want to make sure the heart of every story comes through
+          with full power and authenticity.<br><br>
+          In the meantime, <strong>we'd love to hear from you</strong>.
+          Lital is open to international inquiries and would be happy to connect.
+        </p>
+        <div class="en-cs-btns">
+          <a href="https://wa.me/972525672256?text=Hi%20Lital%2C%20I%27m%20interested%20in%20your%20lectures%20in%20English%20%F0%9F%99%8F"
+             class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
+            💬 WhatsApp
+          </a>
+          <a href="mailto:litalefraim103@gmail.com?subject=Lectures%20in%20English"
+             class="contact-btn">
+            ✉️ Send an Email
+          </a>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -472,7 +531,18 @@
     });
     document.getElementById('btnHe').classList.toggle('active', lang==='he');
     document.getElementById('btnEn').classList.toggle('active', lang==='en');
-    buildLectures(lang);
+
+    // Show Hebrew lecture cards OR English "coming soon" page
+    const lecturesWrapper = document.getElementById('lecturesWrapper');
+    const enComingSoon    = document.getElementById('en-coming-soon');
+    if (lang === 'en') {
+      lecturesWrapper.style.display = 'none';
+      enComingSoon.style.display    = 'block';
+    } else {
+      lecturesWrapper.style.display = '';
+      enComingSoon.style.display    = 'none';
+      buildLectures(lang);
+    }
     requestAnimationFrame(initObs);
   }
 
@@ -529,7 +599,7 @@
       <h3 class="modal-title">בואו נדבר</h3>
       <p class="modal-subtitle">השאירו פרטים ואחזור אליכם בהקדם</p>
       <form id="contactForm" onsubmit="submitForm(event)">
-        <input type="hidden" name="access_key" value="YOUR_KEY_HERE">
+        <input type="hidden" name="access_key" value="2eab271c-d761-4c7f-8350-4872e003db42">
         <input type="hidden" name="subject" id="formSubject" value="הזמנת הרצאה">
         <input type="hidden" name="redirect" value="false">
         <div class="form-row">
