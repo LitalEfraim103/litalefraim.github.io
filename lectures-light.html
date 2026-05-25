@@ -577,9 +577,9 @@
 
   // ── MODAL ──
   function openModal(subject) {
-    document.getElementById('formStatus').className = 'form-status';
     document.getElementById('contactForm').reset();
     document.getElementById('formSubject').value = subject || 'הזמנת הרצאה';
+    document.getElementById('formStatus').className = 'form-status';
     document.getElementById('contactModal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -589,6 +589,30 @@
     e.preventDefault();
     const btn = document.getElementById('formSubmitBtn');
     const status = document.getElementById('formStatus');
+    status.className = 'form-status';
+
+    // ── ולידציה: טלפון (אם הוזן) ──
+    const phoneEl = e.target.querySelector('[name="phone"]');
+    const phoneVal = phoneEl ? phoneEl.value.trim() : '';
+    if (phoneVal) {
+      const digits = phoneVal.replace(/[\s\-\+\(\)]/g, '');
+      if (!/^(972[0-9]{9}|0[0-9]{8,9})$/.test(digits)) {
+        status.className = 'form-status error';
+        status.textContent = 'מספר הטלפון אינו תקין — נא להזין מספר ישראלי (לדוגמה: 050-1234567)';
+        phoneEl.focus();
+        return;
+      }
+    }
+
+    // ── ולידציה: תוכן הודעה ──
+    const msgEl = e.target.querySelector('[name="message"]');
+    if (msgEl && msgEl.value.trim().length < 2) {
+      status.className = 'form-status error';
+      status.textContent = 'נא לכתוב הודעה קצרה — במה אוכל לעזור?';
+      msgEl.focus();
+      return;
+    }
+
     btn.disabled = true; btn.textContent = 'שולח...';
     try {
       const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(e.target) });
@@ -609,6 +633,7 @@
       <form id="contactForm" onsubmit="submitForm(event)">
         <input type="hidden" name="access_key" value="2eab271c-d761-4c7f-8350-4872e003db42">
         <input type="hidden" name="subject" id="formSubject" value="הזמנת הרצאה">
+        <input type="hidden" name="מקור הפנייה" value="דף ההרצאות">
         <input type="hidden" name="redirect" value="false">
         <div class="form-row">
           <div class="form-group"><label>שם מלא *</label><input type="text" name="name" required placeholder="ישראל ישראלי"></div>
