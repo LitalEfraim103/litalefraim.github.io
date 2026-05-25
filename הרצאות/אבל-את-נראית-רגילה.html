@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>אבל את נראית רגילה — ליטל אפרים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ══ TOKENS ══ */
+:root {
+  --bg:         #08111E;
+  --surface:    #0D1B2E;
+  --surface2:   #112038;
+  --wine:       #7D1930;
+  --wine-v:     #A8254A;
+  --wine-r:     #D04068;
+  --beige:      #C8A87A;
+  --beige-l:    #DFC4A0;
+  --beige-p:    #EFD8B5;
+  --white:      #EDF2F7;
+  --gray:       #8898B0;
+  --gray-d:     #46556A;
+  --callout-bg: #130818;
+  --bar:        #A8254A;
+  --footer-bg:  #0A1220;
+  --footer-c:   #3A4A60;
+  --discuss-bg: #0A0F1C;
+}
+.light {
+  --bg:         #FAF7F2;
+  --surface:    #FFFFFF;
+  --surface2:   #F5EDE4;
+  --wine:       #5C1220;
+  --wine-v:     #8B2035;
+  --wine-r:     #A83050;
+  --beige:      #9B7345;
+  --beige-l:    #C8A87A;
+  --beige-p:    #DFC4A0;
+  --white:      #1A1A2E;
+  --gray:       #2D3748;
+  --gray-d:     #6B7280;
+  --callout-bg: #FCE8EC;
+  --bar:        #5C1220;
+  --footer-bg:  #F0E9DF;
+  --footer-c:   #8B8B9B;
+  --discuss-bg: #FDF5F0;
+}
+
+/* ══ RESET ══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+body{font-family:'Heebo',sans-serif;direction:rtl}
+
+/* ══ SHELL ══ */
+#shell{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+
+/* ══ STAGE ══ */
+#stage{position:relative;width:1280px;height:720px;overflow:hidden;transform-origin:top left}
+
+/* ══ SLIDE BASE ══ */
+.slide{
+  position:absolute;inset:0;
+  background:var(--bg);color:var(--white);
+  display:flex;flex-direction:column;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .38s cubic-bezier(.4,0,.2,1),transform .38s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;overflow:hidden;
+}
+.slide.active{opacity:1;transform:translateY(0);pointer-events:auto}
+.slide.exit-up{opacity:0;transform:translateY(-16px)}
+
+/* big ghost number */
+.slide::after{
+  content:attr(data-n);
+  position:absolute;
+  font-size:280px;font-weight:900;
+  color:var(--surface);
+  left:-0.03em;bottom:-0.1em;
+  line-height:1;pointer-events:none;user-select:none;
+  z-index:0;transition:color .3s;
+}
+/* top wine bar */
+.slide::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--wine),var(--wine-v),var(--bar),var(--wine-v),var(--wine));
+  z-index:10;
+}
+
+/* ══ SLIDE COUNTER — top right ══ */
+#slide-indicator{
+  position:fixed;
+  top:18px;right:28px;
+  z-index:9999;
+  font-family:'Heebo',sans-serif;
+  font-size:13px;font-weight:700;
+  color:var(--white);
+  letter-spacing:.08em;
+  background:rgba(10,18,32,.75);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(168,37,74,.35);
+  border-radius:24px;
+  padding:5px 16px;
+  transition:background .3s, color .3s;
+  user-select:none;
+}
+.light #slide-indicator{
+  background:rgba(255,255,255,.88);
+  color:var(--white);
+  border-color:rgba(92,18,32,.25);
+}
+#slide-indicator .cur{
+  font-size:17px;font-weight:900;color:var(--wine-r);
+}
+
+/* ══ THEME TOGGLE — top left ══ */
+#theme-btn{
+  position:fixed;top:18px;left:28px;
+  z-index:9999;
+  background:rgba(10,18,32,.75);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(168,37,74,.3);
+  border-radius:24px;
+  color:var(--gray);font-size:11px;font-weight:600;
+  cursor:pointer;padding:5px 14px;
+  transition:all .2s;font-family:'Heebo',inherit;
+  letter-spacing:.06em;
+}
+.light #theme-btn{background:rgba(255,255,255,.88);border-color:rgba(92,18,32,.2)}
+#theme-btn:hover{border-color:var(--wine-v);color:var(--white)}
+
+/* ══ PROGRESS BAR — bottom ══ */
+#progress{position:fixed;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.06);z-index:9999}
+#pbar{height:100%;background:var(--wine-v);transition:width .3s ease}
+
+/* ══ NAV ARROWS — sides ══ */
+.nav-arrow{
+  position:fixed;top:50%;transform:translateY(-50%);
+  z-index:9999;width:44px;height:44px;
+  background:rgba(10,18,32,.6);backdrop-filter:blur(8px);
+  border:1px solid rgba(168,37,74,.25);border-radius:50%;
+  color:var(--gray);font-size:22px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;opacity:.5;
+}
+.nav-arrow:hover{opacity:1;background:rgba(168,37,74,.2);color:var(--wine-r)}
+#btnPrev{right:12px}
+#btnNext{left:12px}
+.light .nav-arrow{background:rgba(255,255,255,.8);border-color:rgba(92,18,32,.2)}
+
+/* ══ FOOTER (all content slides) ══ */
+.slide-footer{
+  position:absolute;bottom:0;left:0;right:0;height:34px;
+  background:var(--footer-bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--footer-c);
+  letter-spacing:.08em;z-index:10;
+  border-top:1px solid rgba(168,37,74,.12);
+}
+.slide-footer .fn{position:absolute;left:22px;font-size:10px;opacity:.5}
+
+/* ══ COVER ══ */
+.slide-cover{justify-content:center;align-items:center;text-align:center}
+.slide-cover .glow{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 45%,rgba(168,37,74,.15) 0%,transparent 68%);
+  z-index:0;pointer-events:none;
+}
+.slide-cover .inner{position:relative;z-index:1;padding:0 80px}
+.slide-cover .eyebrow{
+  display:block;font-size:11px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--wine-v);margin-bottom:26px;
+}
+.slide-cover h1{
+  font-family:'Alef',sans-serif;
+  font-size:78px;font-weight:700;line-height:1.06;
+  color:var(--wine-r);margin-bottom:22px;
+}
+.slide-cover .rule{
+  width:130px;height:3px;margin:0 auto 22px;
+  background:linear-gradient(90deg,transparent,var(--wine-v),transparent);
+}
+.slide-cover .subtitle{
+  font-size:23px;font-weight:300;color:var(--beige-l);
+  line-height:1.6;max-width:640px;margin:0 auto;
+}
+.slide-cover .author{
+  position:absolute;bottom:52px;left:0;right:0;
+  font-size:13px;letter-spacing:.14em;color:var(--gray-d);
+}
+
+/* ══ STATEMENT ══ */
+.slide-statement{justify-content:center;align-items:center;text-align:center}
+.slide-statement .inner{position:relative;z-index:1;padding:0 100px}
+.slide-statement .stmt-label{
+  font-size:11px;font-weight:700;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--wine-v);
+  margin-bottom:28px;display:block;
+}
+.slide-statement .stmt-title{
+  font-family:'Alef',sans-serif;
+  font-size:58px;font-weight:700;line-height:1.15;
+  color:var(--wine-r);margin-bottom:20px;
+}
+.slide-statement .stmt-sub{
+  font-size:26px;font-weight:300;color:var(--beige-l);
+  line-height:1.55;
+}
+.slide-statement.tinted{background:var(--surface2)}
+
+/* ══ QUOTE ══ */
+.slide-quote{justify-content:center;align-items:center;text-align:center}
+.slide-quote .inner{position:relative;z-index:1;padding:0 100px;max-width:980px}
+.slide-quote .qmark{
+  font-size:110px;font-weight:900;line-height:.6;
+  color:var(--wine);opacity:.35;font-family:'Alef',sans-serif;
+}
+.slide-quote blockquote{
+  font-family:'Alef',sans-serif;
+  font-size:32px;font-weight:400;line-height:1.6;
+  color:var(--beige-p);margin:14px 0;
+}
+.slide-quote .qsub{
+  font-size:17px;color:var(--gray);line-height:1.75;margin-top:22px;
+}
+
+/* ══ CONTENT ══ */
+.slide-content .slide-head{
+  padding:20px 58px 14px;
+  border-bottom:1px solid rgba(168,37,74,.18);
+  position:relative;z-index:1;flex-shrink:0;
+}
+.slide-content .eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--wine-v);
+  display:block;margin-bottom:4px;
+}
+.slide-content .slide-title{
+  font-family:'Alef',sans-serif;
+  font-size:34px;font-weight:700;line-height:1.12;
+  color:var(--wine-r);
+}
+.slide-content .slide-body{
+  flex:1;padding:16px 58px 42px;
+  overflow:hidden;position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:12px;
+}
+.bullet-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.bullet-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:17px;color:var(--gray);line-height:1.6;
+  font-weight:500;
+}
+.bullet-list li .bul{
+  color:var(--wine-v);font-size:9px;margin-top:7px;flex-shrink:0;
+}
+.items2-heading{
+  font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--wine-v);margin-top:10px;margin-bottom:2px;
+}
+.note-box{
+  font-size:14px;color:var(--gray-d);
+  line-height:1.72;font-style:italic;
+  padding-top:10px;border-top:1px solid rgba(168,37,74,.12);
+}
+.callout-box{
+  background:var(--callout-bg);
+  border:1px solid rgba(168,37,74,.38);
+  border-right:4px solid var(--wine-v);
+  border-radius:8px;
+  padding:14px 20px;
+  font-size:15px;font-weight:700;color:var(--beige-p);
+  line-height:1.62;white-space:pre-line;flex-shrink:0;
+}
+.light .callout-box{border-color:rgba(92,18,32,.35);border-right-color:var(--wine-v)}
+
+/* ══ AGENDA ══ */
+.slide-agenda .slide-head{
+  padding:20px 58px 12px;
+  border-bottom:1px solid rgba(168,37,74,.18);
+  position:relative;z-index:1;flex-shrink:0;
+}
+.slide-agenda .slide-title{
+  font-family:'Alef',sans-serif;
+  font-size:32px;font-weight:700;color:var(--wine-r);
+}
+.slide-agenda .agenda-grid{
+  flex:1;padding:14px 58px 42px;
+  display:grid;grid-template-columns:1fr 1fr;gap:4px 36px;
+  position:relative;z-index:1;
+}
+.agenda-item{
+  display:flex;align-items:center;gap:12px;
+  font-size:15px;font-weight:500;color:var(--gray);line-height:1.5;
+}
+.agenda-num{
+  min-width:24px;height:24px;
+  background:var(--wine);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.agenda-note{
+  font-size:12px;color:var(--gray-d);
+  padding:6px 58px 0;font-style:italic;
+  position:relative;z-index:1;flex-shrink:0;
+}
+
+/* ══ TWO-COLUMN ══ */
+.slide-twocol .slide-head{
+  padding:16px 58px 12px;
+  border-bottom:1px solid rgba(168,37,74,.18);
+  position:relative;z-index:1;flex-shrink:0;
+}
+.slide-twocol .slide-title{
+  font-family:'Alef',sans-serif;
+  font-size:27px;font-weight:700;color:var(--wine-r);
+}
+.slide-twocol .cols{
+  flex:1;display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;padding:14px 58px 42px;
+  position:relative;z-index:1;overflow:hidden;
+}
+.col-card{
+  background:var(--surface);
+  border:1px solid rgba(168,37,74,.2);
+  border-radius:12px;
+  padding:16px 20px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.col-heading{
+  font-size:13px;font-weight:700;letter-spacing:.1em;
+  color:var(--wine-v);text-transform:uppercase;
+  padding-bottom:8px;border-bottom:1px solid rgba(168,37,74,.2);
+}
+.slide-twocol .callout-box{
+  position:absolute;bottom:38px;left:58px;right:58px;font-size:14px;
+}
+
+/* ══ DISCUSS ══ */
+.slide-discuss{
+  background:var(--discuss-bg);
+  justify-content:center;align-items:center;text-align:center;
+}
+.slide-discuss .glow{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 65% 50% at 50% 50%,rgba(168,37,74,.1) 0%,transparent 68%);
+  z-index:0;pointer-events:none;
+}
+.slide-discuss .inner{position:relative;z-index:1;padding:0 80px}
+.slide-discuss .topic-pill{
+  display:inline-block;padding:5px 18px;
+  background:rgba(168,37,74,.15);
+  border:1px solid rgba(168,37,74,.32);border-radius:20px;
+  font-size:11px;font-weight:700;color:var(--wine-v);
+  letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:30px;
+}
+.slide-discuss .discuss-icon{font-size:54px;margin-bottom:20px;display:block;filter:grayscale(.25)}
+.slide-discuss .prompt{
+  font-family:'Alef',sans-serif;
+  font-size:40px;font-weight:700;line-height:1.28;
+  color:var(--white);
+}
+
+/* ══ SUMMARY ══ */
+.slide-summary .slide-head{
+  padding:20px 58px 14px;
+  border-bottom:1px solid rgba(168,37,74,.18);
+  position:relative;z-index:1;flex-shrink:0;
+}
+.slide-summary .slide-title{
+  font-family:'Alef',sans-serif;
+  font-size:34px;font-weight:700;color:var(--wine-r);
+}
+.slide-summary .slide-body{
+  flex:1;padding:20px 58px 42px;
+  position:relative;z-index:1;overflow:hidden;
+}
+.slide-summary .note-pre{
+  font-size:14px;color:var(--gray-d);font-style:italic;margin-bottom:14px;
+}
+.summary-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.summary-list li{
+  display:flex;align-items:center;gap:18px;
+  font-size:19px;font-weight:700;
+  color:var(--beige-l);line-height:1.4;
+}
+.summary-list .snum{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--wine);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;
+}
+
+/* ══ QUESTION ══ */
+.slide-question{justify-content:center;align-items:center;text-align:center}
+.slide-question .inner{position:relative;z-index:1}
+.slide-question .qbig{
+  font-family:'Alef',sans-serif;
+  font-size:160px;font-weight:900;line-height:1;
+  color:var(--wine-r);
+  text-shadow:0 0 80px rgba(208,64,104,.22);
+}
+.slide-question .qtitle{
+  font-size:34px;font-weight:300;color:var(--beige-l);margin-top:-14px;
+}
+.slide-question .qnote{
+  font-size:14px;color:var(--gray-d);
+  max-width:640px;margin:24px auto 0;
+  line-height:1.75;font-style:italic;
+}
+
+/* light overrides */
+.light #progress{background:rgba(0,0,0,.07)}
+.light .slide::after{color:var(--surface)}
+.light #pbar{background:var(--wine-v)}
+</style>
+</head>
+<body>
+
+<div id="shell"><div id="stage"></div></div>
+
+<div id="progress"><div id="pbar"></div></div>
+
+<!-- slide counter top-right -->
+<div id="slide-indicator"><span class="cur">1</span>&thinsp;/&thinsp;54</div>
+
+<!-- theme toggle top-left -->
+<button id="theme-btn">☀️ בהיר</button>
+
+<!-- side nav arrows -->
+<button class="nav-arrow" id="btnPrev" title="הקודם (→)">›</button>
+<button class="nav-arrow" id="btnNext" title="הבא (←)">‹</button>
+
+<script>
+// ── DATA ────────────────────────────────────────────────────────────
+const SLIDES=[{"type":"cover","eyebrow":"ליטל אפרים","title":"אבל את נראית רגילה","subtitle":"כשפוסט-טראומה מסתתרת מאחורי תפקוד"},{"type":"content","title":"מי אני?","items":["קוראים לי ליטל, היום חיה במרכז","עובדת במשרה מלאה++, בקבע במלחמה","מחזיקה דירות בכוחות עצמי מגיל 18","מהנדסת מהטכניון, כיום במהלך התואר השני","בוגרת קורס דירקטוריון למנהלות","מרצה לנוער בסיכון, לאנשי טיפול ולמנהלים","מתנדבת עם קשישים","חולה על מסעדות","מתכננת איך לקנות בית בעתיד הנראה לעין"]},{"type":"content","title":"מי אני עוד?","items":["במקור מהפריפריה, גם הכלכלית","אבא נכה מאז שאני זוכרת את עצמי","חווה אובדן על ימין ועל שמאל של אנשים קרובים","מטופלת כבר מעל עשור","אובחנתי כדיכאון קליני, הפרעת אישיות גבולית, דו קוטביות — עד שנמצאה האבחנה האמיתית","מתקשה לקום בבקרים"]},{"type":"statement","title":"ליטל שמכירים","subtitle":"מה שכולם רואים"},{"type":"statement","title":"ליטל שמכירים","subtitle":"מה שאני מרגישה באמת","dark":true},{"type":"quote","text":"פוסט-טראומה מורכבת מתפקדת היא לא פחות טראומטית — היא פשוט שקטה יותר.","sub":"אני לא פחות דפוקה מכל מתמודד נפש אחר. פשוט עליי «קצת פחות רואים»."},{"type":"content","eyebrow":"למה אני כאן","title":"למה אני כאן?","items":["קשה לי עם הגדרות","קשה לי עם הפער בין הרמה התפקודית שלי לבין ההרגשה הפנימית","היום הרבה יותר אכפת לי מעצמי ומחברות שלי","אני מאמינה שמגיע לי ולמתמודדים נוספים עתיד טוב יותר — ואפשר להרוויח אותו בתקשורת"]},{"type":"content","eyebrow":"למה אני כאן","title":"למה אני כאן? (המשך)","items":["ניסיון לא טוב עם מתאמי שיקום — המלצות לטיפולים אלטרנטיביים, לאחר באופן קבוע, לחשוב שאם אני «מתפקדת» אז אסתדר לבד","ניסיון לא טוב עם אנשי טיפול — להניח שאשים לב שמישהי בהיריון, לחשוב שאני סופרת כמה זמן נשאר לטיפול","ניסיון חיובי — למדתי איך זה יכול להיות מוצלח ומועיל"]},{"type":"agenda","title":"על מה נדבר היום?","items":["המלצת הזהב","\"החזקים שקורסים בשקט\" — לחיות ב\"הפתעה\"","משמעות ההכרה","מיצוי זכויות","דיסוציאציה","קשר מיטיב","שיח בגובה העיניים","הקשבה לעומת הכתבה","גמישות","כבוד","\"החלום ושברו\"","סיכום"],"note":"יש הרבה מן המשותף בין הנקודות — ותחוו את הדמיון לאורך כל השיח"},{"type":"content","eyebrow":"המלצת הזהב","title":"המלצת הזהב","items":["אנשים המתפקדים עם פוסט טראומה מורכבת אינם זקוקים ליותר דרישות — אלא ליותר התאמה","אנחנו לא נמצאים תמיד ב«שגרת חיים» קבועה","אנחנו לא צריכים שיכריחו אותנו להוכיח תפקוד","התכנית צריכה לנוע יחד איתנו, לא שאנחנו ננוע לכיוונה"],"callout":"שיקום לאנשים מתפקדים חייב להשתנות בקצב שלנו, ברעש שלנו, בשקט שלנו — ולא בקצב המערכת.\nתפקוד אינו מדד לבריאות. החיים אינם הוכחה לריפוי."},{"type":"discuss","topic":"המלצת הזהב","prompt":"דוגמה"},{"type":"discuss","topic":"המלצת הזהב","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"twocol","title":"\"החזקים שקורסים בשקט\" — לחיות ב\"הפתעה\"","colA":{"heading":"הצד החזק שלי","items":["נראית בשליטה","לוקחת אחריות גם כשאני לא יכולה","העולם נשען עליי – במשפחה, בצבא, בעבודה","למדתי להסתיר כאב, להדחיק פחד, ולהמשיך לתפקד"]},"colB":{"heading":"מה קורה בשקט?","items":["הלילות מלאים פלאשבקים, והימים מלאים מסכות","הבדידות שקטה — אף אחד לא יודע שצריך לשאול אם אני בסדר","לא מרשה לעצמי להרגיש — כי אם אתחיל, אולי לא אוכל להפסיק","מתביישת לבקש עזרה, כי אני חושבת ש«זה לא לגיטימי»"]},"callout":"לא רק נראיתי חזקה — שרדתי כי לא הייתה לי ברירה אחרת"},{"type":"discuss","topic":"\"החזקים שקורסים בשקט\"","prompt":"דוגמה"},{"type":"discuss","topic":"\"החזקים שקורסים בשקט\"","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"משמעות ההכרה","title":"משמעות ההכרה","callout":"לפעמים אלה שנראים הכי חזקים — הם אלה שהכי צריכים שמישהו יראה אותם","items":["התפקוד הוא לא החלמה — הוא לעיתים מנגנון הישרדות","כשרואים אותי, הקצוות פחות פוגשים אותי","כשיש מישהו עם «היד על הדופק» — אפשר להסתובב בעולם עם ביטחון רב יותר","ביטחון רב יותר = יציבות גדולה יותר","לפחות במקום אחד, הצורך להתחבא קטן משמעותית"]},{"type":"discuss","topic":"משמעות ההכרה","prompt":"סיוון"},{"type":"discuss","topic":"הכרה","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"מיצוי זכויות","title":"מיצוי זכויות","items":["אני לא יכולה לראות בעצמי כ«זכאית» — הגשתי בקשה רק בגלל היכרות עם מקרים דומים","התפקוד החיצוני מטעה — אני לא «נראית» פגועה — מה שמפחית את הלגיטימציה","הגעתי שחורה, מוצפת, מותשת וחסרת כוחות לשלב שבו יכולתי לבקש את הזכויות"],"items2":["בושה («אחרים יותר פגועים ממני»)","אמירות מהסביבה («אבל את נראית מצוין»)","קושי ביורוקרטי — טפסים, ועדות, שפה משפטית","חוויות עבר של השפלה מול מוסדות"],"items2heading":"חסמים נפוצים:"},{"type":"content","eyebrow":"מיצוי זכויות","title":"מיצוי זכויות — איך תוכלו לעזור?","items":["לנרמל את עצם הדרישה לזכויות","ללוות בעדינות מול מוסדות — בלי להכתיב, אלא בשותפות","להחזיר לאדם תחושת ערך, לגיטימציה, וסוכנות"],"callout":"מיצוי זכויות הוא לא נדבה — זו זכות אנושית בסיסית.\nהדרך לשם מתחילה במישהו שיאמין שמגיע לי."},{"type":"discuss","topic":"מיצוי זכויות","prompt":"ביטוח לאומי"},{"type":"discuss","topic":"מיצוי זכויות","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"דיסוציאציה","title":"דיסוציאציה","callout":"החכמה של הנפש לשרוד מצבים בלתי נסבלים","items":["לשבת בפגישה ולשכוח מה קרה בה","פונים אליי ואני לא שמה לב","מתפקדת על «אוטומט» ברמה שאין לי מושג מה עשיתי בכלל"],"note":"היכולת להחזיק את ה«גם וגם» — ולהבין את מה שקורה לי בגוף — זה נותן לי תוקף שמאפשר לי לקבל את ה«חריגה» הזו."},{"type":"discuss","topic":"דיסוציאציה","prompt":"דוגמה"},{"type":"content","eyebrow":"דיסוציאציה","title":"צחוק כדיסוציאציה","callout":"הצחוק הוא מסכה זמנית","items":["כשאדם מספר משהו קשה ומגיב בצחוק — הוא לפעמים מחזיק בכוחותיו האחרונים","מנגנון לא מודע של ניתוק רגשי מהחוויה","ניסיון להרחיק את עוצמת הרגש — «אם ארגיש באמת, זה ישבור אותי»","שמירה על תחושת שליטה בסיטואציה שבה יש סכנת הצפה"]},{"type":"content","eyebrow":"דיסוציאציה","title":"צחוק כדיסוציאציה — זיהוי ותגובה","items":["חוסר התאמה בין תוכן רגשי כבד לבין הטון או ההבעה","האדם נראה מנותק, מדבר מהר, שפת גוף נוקשה","התחושה בחדר: «משהו לא יושב במקום»"],"items2":["לא להבהיל ולא לשפוט","לשקף בעדינות: «את צוחקת, אבל אני שומעת שאת מתארת משהו קשה»","לזכור שזה מנגנון הישרדותי — לא לזלזל, לא להתגרות"],"items2heading":"מה לעשות?"},{"type":"discuss","topic":"דיסוציאציה","prompt":"דוגמה"},{"type":"discuss","topic":"דיסוציאציה","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"קשר מיטיב","title":"קשר מיטיב — מה זה אומר?","items":["נראות — שרואים אותי באמת, לא רק את התפקוד ולא רק את הסימפטומים","קבלה ללא תנאי — אין שיפוט, אין דרישה להיות «בסדר». מותר להיות שבורה","אמון — נבנה לאט ובזהירות, במיוחד עבור מי שחווה קשרים פוגעניים","שיתוף פעולה — «אנחנו יוצרים יחד». אני שותפה בתהליך, לא מושא לו","תחושת ביטחון — מקום שבו אפשר לנשום"]},{"type":"content","eyebrow":"קשר מיטיב","title":"קשר מיטיב","callout":"אדם אחד שראה אותך באמת — יכול לשנות את כל מסלול הריפוי שלך","items":["טראומה כרונית היא פגיעה בקשר — בדרך כלל פגיעה מתמשכת באמון ובתחושת הערך","כשאיש מקצוע רואה אותי מתוך מקום אמיתי, הוא מלמד אותי איך נראה קשר נכון","מאפשר לי לבנות קשרים מיטיבים בחיים שלי","קשר מיטיב ≠ מושלם — אבל תמיד מבוסס על כנות, הקשבה ורצון טוב"]},{"type":"discuss","topic":"קשר מיטיב","prompt":"דוגמה"},{"type":"discuss","topic":"קשר מיטיב","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"question","title":"שאלות?"},{"type":"content","eyebrow":"שיח בגובה העיניים","title":"שיח בגובה העיניים","callout":"אנחנו לא צריכים מישהו שיציל אותנו — אנחנו צריכים מישהו שיראה אותנו","items":["השיח ממקום שיפוטי «שולף החוצה» את כל מנגנוני ההגנה","היכולת שלי לתפקד שמה במרכז: גם בלעדיכם הצלחתי איכשהו","המקום שלכם: להקל, לאפשר להמשיך את הדרך שהתחלתי, לייצר חוויה מתקנת"]},{"type":"content","eyebrow":"שיח בגובה העיניים","title":"שיח בגובה העיניים — יתרונות","items":["מפחית מנגנוני הגנה — מאפשר להניח את השריון ולהפסיק להעמיד פנים","מחזיר תחושת ערך — יחס שוויוני ועמפתי עוזר לשקם תחושת אנושיות בסיסית","מאפשר קשר טיפולי אמיתי — אמון נבנה כשמרגישים מפגש של אדם מול אדם","מחזק תחושת שליטה — שיח שיתופי מחזיר לי את האפשרות לבחור, להביע, להשפיע"]},{"type":"discuss","topic":"שיח בגובה העיניים","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"הקשבה ולא הכתבה","title":"הקשבה ולא הכתבה","callout":"הכתבה משתקת. הקשבה פותחת מרחב — ובהתחלה זה כל מה שאדם צריך","items":["אנשים עם טראומה מורכבת חוו מערכות יחסים כוחניות — שבהן לא הייתה להם שליטה","לכן, הקשבה אמיתית היא לא רק כלי — היא תיקון"]},{"type":"discuss","topic":"הקשבה ולא הכתבה","prompt":"דוגמה"},{"type":"discuss","topic":"הקשבה ולא הכתבה","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"גמישות","title":"גמישות — עוגן בתוך כאוס","items":["המציאות הפנימית משתנה במהירות — יום אחד הכל פתוח, ולמחרת מוצפת ומנותקת","מה שנראה «קל» כלפי חוץ — עלול לדרוש מאמץ עצום מבפנים","נוקשות ודרישות קבועות מדי — מחמירות תחושות של כישלון, בושה וניתוק","גמישות היא לא ויתור — היא רגישות. להתעקש על קשר, לא על שיטה"]},{"type":"content","eyebrow":"גמישות","title":"גמישות — איך זה בא לידי ביטוי?","callout":"גמישות היא היכולת להישאר יציב — מבלי לדרוש מהאחר להיות קבוע","items":["התאמת הכלים, המטרות והקצב לפי המקום שבו המטופל נמצא","שינוי סגנון התקשורת לפי הצורך","הבנה ש«תפקוד» לא תמיד משקף רגש","מתן מקום לזגזוג, לאי-עקביות, לרגעי ניתוק"]},{"type":"discuss","topic":"גמישות","prompt":"עבודה מהבית"},{"type":"discuss","topic":"גמישות","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"כבוד","title":"כבוד","items":["לזכור שלפני הפוסט-טראומה — יש אדם","להאמין שאדם יודע משהו עמוק על עצמו, גם כשהוא מבולבל","להימנע מהקטנה, לגלוג, הדרכה מלמעלה","לתת לאדם מרחב לבחור, לטעות, ללמוד בקצב שלו","לזכור: הכבוד העצמי נשחק שוב ושוב — דרך השפלה, שליטה, אלימות רגשית"]},{"type":"content","eyebrow":"כבוד","title":"כבוד — איך זה בא לידי ביטוי?","callout":"כבוד הוא לא תגמול — הוא נקודת מוצא","items":["כבוד לזמנים — להגיע בזמן, לטפל בדברים בקצב סביר","כבוד בשיח — לזכור שאף אחד לא עמד במקום של אחר","כבוד למקום — להביע הערכה לדברים הטובים, מתוך בחירה לראות את הטוב","כבוד לאדם — להיות בהקשבה, לא להתפרץ, לקבל דעות שונות","כבוד לחלקים הפחות מתפקדים — לתת מקום גם לדברים שקשה לראות"]},{"type":"discuss","topic":"כבוד","prompt":"הקשישה שהנכדים חוזרים לקידוש אצלה"},{"type":"discuss","topic":"כבוד","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"content","eyebrow":"\"החלום ושברו\"","title":"\"החלום ושברו\"","items":["החלום: זוגיות, יציבות, קריירה — תחושת ערך, שייכות, ביטחון רגשי","לא לשרוד, אלא לחיות. להיות «כמו כולם»","השבר: הפוסט-טראומה שלא נראית, אבל נוכחת","החיים שמתנהלים על פני השטח — והבדידות הפנימית מתחת"],"note":"לא למחוק את החלום — אלא להחזיק אותו יחד. לא למהר לתקן, אלא להיות נוכח בשבר."},{"type":"content","eyebrow":"\"החלום ושברו\"","title":"\"החלום ושברו\"","items":["יש רגעים שבהם אני צריכה שמישהו אחר יחזיר לי את התקווה","ויש רגעים שבהם אני צריכה שמישהו יווסת עבורי את השיגעון"]},{"type":"discuss","topic":"\"החלום ושברו\"","prompt":"איך לגשת אליו כאיש/ת ליווי שיקומי?"},{"type":"summary","title":"נקודות מרכזיות","items":["לא רק נראיתי חזקה — שרדתי כי לא הייתה לי ברירה אחרת","לפעמים אלה שנראים הכי חזקים — הם אלה שהכי צריכים שמישהו יראה אותם","מיצוי זכויות הוא לא נדבה — זו זכות אנושית בסיסית","החכמה של הנפש לשרוד מצבים בלתי נסבלים","אנחנו לא צריכים מישהו שיציל אותנו — אנחנו צריכים מישהו שיראה אותנו"]},{"type":"twocol","title":"כלי עבודה למנחי שיקום","colA":{"heading":"שאלות ושיח","items":["\"מה יכול להקל עלייך בשבוע הקרוב?\"","\"מה את לא רוצה שנעשה?\"","לקבוע מטרות מתחלפות, לא מטרות שנתיות קבועות","לאפשר הפסקות בטוחות (חופשות שיקום)","להשתמש בבחירה מבוקרת — 2–3 אפשרויות"]},"colB":{"heading":"זיהוי וליווי","items":["להאט את הקצב — לדבר לאט, לנשום יחד","לא לשאול «למה» — לשאול «מה קורה לך עכשיו?»","להימנע מלשבח תפקוד יתר","לשאול: «מה המחיר של להחזיק כל כך הרבה?»","עקרון על: תוקף לפני תכנון"]}},{"type":"summary","title":"סיכום","note":"4 עקרונות ליומיום עם אנשים מתפקדים:","items":["שיח בגובה העיניים","גמישות","הקשבה","כבוד"]},{"type":"question","title":"שאלות?","note":"כשהכנתי פעם הרצאה לנוער בסיכון, אמרו לי לפתוח ברצף של תמונות שמייצגות את מי שאני. נראה לי שזה המקום לספר למה בחרתי ברצף הזה..."}];
+
+// ── HELPERS ─────────────────────────────────────────────────────────
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const bul  = (arr,sz='') => (arr||[]).map(it=>`
+  <li class="bullet-list-item"><span class="bul">◆</span><span>${esc(it)}</span></li>`).join('');
+const foot = (n,tot) => `
+  <div class="slide-footer">
+    ליטל אפרים — אבל את נראית רגילה
+    <span class="fn">${n}&thinsp;/&thinsp;${tot}</span>
+  </div>`;
+
+// ── RENDERERS ───────────────────────────────────────────────────────
+function render(s, n, tot) {
+  const t = s.type;
+
+  if (t==='cover') return `
+    <div class="glow"></div>
+    <div class="inner">
+      <span class="eyebrow">${esc(s.eyebrow||'')}</span>
+      <h1>${esc(s.title)}</h1>
+      <div class="rule"></div>
+      <p class="subtitle">${esc(s.subtitle||'')}</p>
+    </div>
+    <div class="author">ליטל אפרים</div>`;
+
+  if (t==='statement') return `
+    <div class="inner">
+      <span class="stmt-label">${esc(s.title)}</span>
+      <div class="stmt-title">${esc(s.title)}</div>
+      <div class="stmt-sub">${esc(s.subtitle||'')}</div>
+    </div>`;
+
+  if (t==='quote') return `
+    <div class="inner">
+      <div class="qmark">"</div>
+      <blockquote>${esc(s.text)}</blockquote>
+      <p class="qsub">${esc(s.sub||'')}</p>
+    </div>`;
+
+  if (t==='agenda') return `
+    <div class="slide-head"><h2 class="slide-title">${esc(s.title)}</h2></div>
+    <div class="agenda-grid">
+      ${(s.items||[]).map((it,i)=>`
+        <div class="agenda-item">
+          <span class="agenda-num">${String(i+1).padStart(2,'0')}</span>
+          <span>${esc(it)}</span>
+        </div>`).join('')}
+    </div>
+    ${s.note?`<p class="agenda-note">${esc(s.note)}</p>`:''}
+    ${foot(n,tot)}`;
+
+  if (t==='content') return `
+    <div class="slide-head">
+      ${s.eyebrow?`<span class="eyebrow">${esc(s.eyebrow)}</span>`:''}
+      <h2 class="slide-title">${esc(s.title)}</h2>
+    </div>
+    <div class="slide-body">
+      ${s.callout?`<div class="callout-box">${esc(s.callout)}</div>`:''}
+      <ul class="bullet-list">${bul(s.items)}</ul>
+      ${s.items2heading?`<div class="items2-heading">${esc(s.items2heading)}</div>`:''}
+      ${s.items2?`<ul class="bullet-list">${bul(s.items2)}</ul>`:''}
+      ${s.note?`<p class="note-box">${esc(s.note)}</p>`:''}
+    </div>
+    ${foot(n,tot)}`;
+
+  if (t==='twocol') {
+    const col = c=>`<div class="col-card">
+      <div class="col-heading">${esc(c.heading)}</div>
+      <ul class="bullet-list">${bul(c.items)}</ul>
+    </div>`;
+    return `
+      <div class="slide-head"><h2 class="slide-title">${esc(s.title)}</h2></div>
+      <div class="cols" style="position:relative">
+        ${col(s.colA)} ${col(s.colB)}
+        ${s.callout?`<div class="callout-box" style="position:absolute;bottom:-4px;left:0;right:0;font-size:13px">${esc(s.callout)}</div>`:''}
+      </div>
+      ${foot(n,tot)}`;
+  }
+
+  if (t==='discuss') return `
+    <div class="glow"></div>
+    <div class="inner">
+      <div class="topic-pill">${esc(s.topic)}</div>
+      <div class="discuss-icon">${s.prompt==='דוגמה'||s.prompt==='סיוון'||s.prompt==='ביטוח לאומי'||s.prompt==='עבודה מהבית'||s.prompt==='הקשישה שהנכדים חוזרים לקידוש אצלה'?'📖':'🤔'}</div>
+      <div class="prompt">${esc(s.prompt)}</div>
+    </div>
+    ${foot(n,tot)}`;
+
+  if (t==='summary') return `
+    <div class="slide-head"><h2 class="slide-title">${esc(s.title)}</h2></div>
+    <div class="slide-body">
+      ${s.note?`<p class="note-pre">${esc(s.note)}</p>`:''}
+      <ul class="summary-list">
+        ${(s.items||[]).map((it,i)=>`
+          <li><span class="snum">${i+1}</span><span>${esc(it)}</span></li>`).join('')}
+      </ul>
+    </div>
+    ${foot(n,tot)}`;
+
+  if (t==='question') return `
+    <div class="inner">
+      <div class="qbig">?</div>
+      <div class="qtitle">${esc(s.title)}</div>
+      ${s.note?`<p class="qnote">${esc(s.note)}</p>`:''}
+    </div>
+    ${foot(n,tot)}`;
+
+  return `<div style="padding:60px;color:var(--gray)">${esc(JSON.stringify(s))}</div>`;
+}
+
+// ── BUILD DECK ───────────────────────────────────────────────────────
+const stage = document.getElementById('stage');
+const total = SLIDES.length;
+const elems = SLIDES.map((s, i) => {
+  const el = document.createElement('section');
+  el.className = `slide slide-${s.type}${s.dark?' tinted':''}`;
+  el.dataset.n = String(i+1).padStart(2,'0');
+  el.innerHTML = render(s, i+1, total);
+  stage.appendChild(el);
+  return el;
+});
+
+// ── NAVIGATION ───────────────────────────────────────────────────────
+let cur = 0;
+const pbar = document.getElementById('pbar');
+const ind  = document.getElementById('slide-indicator');
+
+function go(to) {
+  if (to < 0 || to >= total) return;
+  elems[cur].classList.remove('active');
+  elems[cur].classList.add('exit-up');
+  setTimeout(()=>elems[cur].classList.remove('exit-up'), 420);
+  cur = to;
+  elems[cur].classList.add('active');
+  ind.innerHTML = `<span class="cur">${cur+1}</span>&thinsp;/&thinsp;${total}`;
+  pbar.style.width = `${((cur+1)/total)*100}%`;
+}
+
+document.getElementById('btnNext').onclick = ()=>go(cur+1);
+document.getElementById('btnPrev').onclick = ()=>go(cur-1);
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowLeft'  || e.key==='ArrowDown' || e.key===' ') { e.preventDefault(); go(cur+1); }
+  if (e.key==='ArrowRight' || e.key==='ArrowUp')  { e.preventDefault(); go(cur-1); }
+  if (e.key==='Home') go(0);
+  if (e.key==='End')  go(total-1);
+  if (e.key==='f'||e.key==='F') {
+    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  }
+});
+
+// ── THEME ────────────────────────────────────────────────────────────
+const tb = document.getElementById('theme-btn');
+tb.onclick = () => {
+  document.body.classList.toggle('light');
+  tb.textContent = document.body.classList.contains('light') ? '🌙 כהה' : '☀️ בהיר';
+};
+
+// ── SCALE ────────────────────────────────────────────────────────────
+function scaleStage() {
+  const sw=window.innerWidth, sh=window.innerHeight;
+  const scale = Math.min(sw/1280, sh/720);
+  const tx=(sw-1280*scale)/2, ty=(sh-720*scale)/2;
+  stage.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
+}
+window.addEventListener('resize', scaleStage);
+scaleStage();
+
+// ── TOUCH SWIPE ──────────────────────────────────────────────────────
+let tx0=0;
+stage.addEventListener('touchstart', e=>{ tx0=e.touches[0].clientX; }, {passive:true});
+stage.addEventListener('touchend',   e=>{ const dx=e.changedTouches[0].clientX-tx0; if(Math.abs(dx)>40){dx>0?go(cur-1):go(cur+1);} });
+
+go(0);
+</script>
+</body>
+</html>
