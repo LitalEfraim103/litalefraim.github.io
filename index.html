@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script>if(localStorage.getItem('theme')!=='dark')location.replace('index-light.html');</script>
+  <script>if(localStorage.getItem('theme')!=='dark')location.replace('index-light.html');if('scrollRestoration' in history)history.scrollRestoration='manual';</script>
   <title>ליטל אפרים | הדרך מתחילה בדיוק</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=Rubik:wght@400;700;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --base:        #0F172A;
@@ -127,11 +127,11 @@
     .hero-content { position: relative; z-index: 1; max-width: 940px; width: 100%; }
 
     .hero-name {
-      font-size: clamp(3rem, 7.5vw, 5.5rem); font-weight: 900; line-height: 1; margin-bottom: 1rem;
+      font-family: 'Rubik', sans-serif;
+      font-size: clamp(3rem, 7.5vw, 5.5rem); font-weight: 700; line-height: 1; margin-bottom: 1rem;
       background: linear-gradient(135deg, var(--white) 10%, var(--turquoise) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    body.lang-he .hero-name { font-family: 'Alef', sans-serif; }
     .hero-tagline {
       font-size: clamp(1rem, 2.8vw, 1.45rem);
       color: var(--beige-light); font-weight: 300; letter-spacing: 0.14em; margin-bottom: 0.5rem;
@@ -397,6 +397,17 @@
     .form-status.success { background: rgba(37,211,102,0.12); color: #4ade80; border: 1px solid rgba(37,211,102,0.22); display: block; }
     .form-status.error { background: rgba(220,38,38,0.12); color: #f87171; border: 1px solid rgba(220,38,38,0.22); display: block; }
     @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } .modal-card { padding: 1.75rem; } }
+
+    /* ── ZOOM TOGGLE ── */
+    .zoom-toggle { display: flex; gap: 0.15rem; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.25rem; }
+    .zoom-btn {
+      padding: 0.3rem 0.6rem; border: none; border-radius: 6px;
+      background: transparent; color: var(--gray);
+      font-size: 0.72rem; font-weight: 900; letter-spacing: 0.02em;
+      transition: all 0.25s; cursor: pointer; font-family: inherit; line-height: 1;
+    }
+    .zoom-btn:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+    .zoom-btn[aria-disabled="true"] { opacity: 0.25; pointer-events: none; }
   </style>
 </head>
 <body class="lang-he">
@@ -420,7 +431,11 @@
       <li><a href="#contact"        data-i="nav-contact">צור קשר</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:0.75rem">
-      <a href="index-light.html" class="theme-toggle" onclick="localStorage.setItem('theme','light');localStorage.setItem('scrollY',window.scrollY);localStorage.setItem('scrollYTime',Date.now())"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="19.78" y1="4.22" x2="17.66" y2="6.34"/><line x1="6.34" y1="17.66" x2="4.22" y2="19.78"/></svg> <span data-i="themeToggle">מצב בהיר</span></a>
+      <a href="index-light.html" class="theme-toggle" onclick="localStorage.setItem('theme','light');localStorage.setItem('scrollY',window.scrollY);localStorage.setItem('scrollYTime',Date.now());localStorage.setItem('zoomIdx',currentZoomIdx)"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="19.78" y1="4.22" x2="17.66" y2="6.34"/><line x1="6.34" y1="17.66" x2="4.22" y2="19.78"/></svg> <span data-i="themeToggle">מצב בהיר</span></a>
+      <div class="zoom-toggle" title="גודל טקסט">
+        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט">א−</button>
+        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט">א+</button>
+      </div>
       <div class="lang-toggle">
         <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
         <button class="lang-btn"        id="btnEn" onclick="setLang('en')">EN</button>
@@ -478,7 +493,7 @@
         <div class="about-card-content">
           <span class="card-pill" data-i="pillAbout">בקצרה</span>
           <h2 class="card-heading" data-i="gwAboutTitle">מאחורי המצפן</h2>
-          <p class="card-body" data-i="gwAboutBody">נעים להכיר, אני ליטל אפרים. העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.</p>
+          <p class="card-body" data-i="gwAboutBody">ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.</p>
           <span class="card-cta" data-i="gwAboutCta">קרא עוד ›</span>
         </div>
       </a>
@@ -528,6 +543,21 @@
   </footer>
 
   <script>
+  // ── FONT ZOOM ──
+  const ZOOM_STEPS = [85, 100, 115]; // % of base font size
+  let currentZoomIdx = 1;            // 1 = 100% (default)
+
+  function applyZoom(idx) {
+    currentZoomIdx = Math.max(0, Math.min(ZOOM_STEPS.length - 1, idx));
+    document.documentElement.style.fontSize = ZOOM_STEPS[currentZoomIdx] + '%';
+    const out = document.getElementById('btnZoomOut');
+    const inn = document.getElementById('btnZoomIn');
+    if (out) out.setAttribute('aria-disabled', currentZoomIdx <= 0 ? 'true' : 'false');
+    if (inn) inn.setAttribute('aria-disabled', currentZoomIdx >= ZOOM_STEPS.length - 1 ? 'true' : 'false');
+    localStorage.setItem('zoomIdx', currentZoomIdx);
+  }
+  function changeZoom(delta) { applyZoom(currentZoomIdx + delta); }
+
   const T = {
     he: {
       dir:'rtl', lang:'he', logo:'LOGO_HE_T.png',
@@ -535,7 +565,7 @@
       heroName:'ליטל אפרים', heroTagline:'הדרך מתחילה בדיוק',
       'nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
       themeToggle:'מצב בהיר',
-      pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'נעים להכיר, אני ליטל אפרים. העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'קרא עוד ›',
+      pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'קרא עוד ›',
       pillLec:'הרצאות', pillTech:'ייעוץ וטכנולוגיה',
       gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול', gwLecCta:'גלה עוד ›',
       gwTechTitle:'ייעוץ וטכנולוגיה', gwTechBody:'מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים', gwTechCta:'גלה עוד ›',
@@ -562,7 +592,7 @@
       heroName:'Lital Efraim', heroTagline:'The Journey Begins with Precision',
       'nav-about':'About Me','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
       themeToggle:'Light Mode',
-      pillAbout:'About Me', gwAboutTitle:'Behind the Compass', gwAboutBody:'Nice to meet you, I\'m Lital Efraim. My work moves between two complementary poles: research and algorithmic thinking in the Spatial AI world, alongside deep mental resilience born from a life journey and daily coping with personal complexity.', gwAboutCta:'Read more ›',
+      pillAbout:'About Me', gwAboutTitle:'Behind the Compass', gwAboutBody:'Lital Efraim, nice to meet you! My work moves between two complementary poles: research and algorithmic thinking in the Spatial AI world, alongside deep mental resilience born from a life journey and daily coping with personal complexity.', gwAboutCta:'Read more ›',
       pillLec:'Lectures', pillTech:'Consulting & Technology',
       gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists', gwLecCta:'Explore ›',
       gwTechTitle:'Consulting & Technology', gwTechBody:'Geographic mapping, AI, computer vision and spatial data processing for industry', gwTechCta:'Explore ›',
@@ -647,10 +677,22 @@
   window.addEventListener('resize', () => updateNavPadding(window.scrollY));
 
   document.addEventListener('DOMContentLoaded', () => {
+    // ── Reset everything on F5 refresh ──
+    const isReload = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+    if (isReload) {
+      localStorage.removeItem('zoomIdx');
+      localStorage.removeItem('scrollY');
+      localStorage.removeItem('scrollYTime');
+    }
+
     const saved = localStorage.getItem('lang') || 'he';
     setLang(saved); spawnParticles(); requestAnimationFrame(initObs);
 
-    // ── Restore scroll position after theme switch (not on pull-to-refresh) ──
+    // ── Restore zoom (persists after theme switch, resets after F5) ──
+    const savedZoom = parseInt(localStorage.getItem('zoomIdx') ?? '1', 10);
+    applyZoom(isNaN(savedZoom) ? 1 : savedZoom);
+
+    // ── Restore scroll position after theme switch only ──
     const savedScroll = localStorage.getItem('scrollY');
     const savedScrollTime = parseInt(localStorage.getItem('scrollYTime') || '0', 10);
     localStorage.removeItem('scrollY');
@@ -660,7 +702,7 @@
       requestAnimationFrame(() => {
         const y = parseInt(savedScroll, 10);
         window.scrollTo(0, y);
-        updateNavPadding(y); // עדכון מיידי — בלי לחכות לאירוע scroll
+        updateNavPadding(y);
         requestAnimationFrame(() => { document.documentElement.style.scrollBehavior = ''; });
       });
     }
