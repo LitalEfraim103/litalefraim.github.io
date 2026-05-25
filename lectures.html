@@ -278,6 +278,8 @@
       color: white; box-shadow: 0 4px 25px rgba(37,211,102,0.28);
     }
     .contact-btn-wa:hover { box-shadow: 0 15px 45px rgba(37,211,102,0.4); }
+    .contact-btn-li { background: #0A66C2; color: white; box-shadow: 0 4px 25px rgba(10,102,194,0.28); }
+    .contact-btn-li:hover { background: #004182; box-shadow: 0 15px 45px rgba(10,102,194,0.38); }
 
     /* ── FOOTER ── */
     footer {
@@ -473,17 +475,23 @@
            class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
           <span data-i="contactWa">WhatsApp</span>
         </a>
+        <a href="https://www.linkedin.com/in/lital-efraim"
+           class="contact-btn contact-btn-li" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <span data-i="footerTxt">© 2025 ליטל אפרים | כל הזכויות שמורות</span>
+    <span data-i="footerTxt">© 2026 ליטל אפרים | כל הזכויות שמורות</span>
     &nbsp;·&nbsp;
     <em data-i="footerTag">הדרך מתחילה בדיוק</em>
     &nbsp;·&nbsp;
     <a href="index.html" style="color:inherit;opacity:0.7" data-i="footerHome">דף הבית</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.linkedin.com/in/lital-efraim" style="color:inherit;opacity:0.7" target="_blank" rel="noopener">LinkedIn</a>
   </footer>
 
   <script>
@@ -508,7 +516,7 @@
       emailSubject:'הזמנת הרצאה: ',
       emailBody:'שלום ליטל,\n\nאני מעוניין/ת בהרצאה "{{title}}".\n\nאשמח לשמוע פרטים.',
       waText:'היי ליטל, אני מתעניין/ת בהרצאה "{{title}}" 🙏',
-      footerTxt:'© 2025 ליטל אפרים | כל הזכויות שמורות',
+      footerTxt:'© 2026 ליטל אפרים | כל הזכויות שמורות',
       footerTag:'הדרך מתחילה בדיוק',
       footerHome:'דף הבית',
       lectures: [
@@ -549,7 +557,7 @@
       emailSubject:'Book a Lecture: ',
       emailBody:'Hi Lital,\n\nI\'m interested in the lecture "{{title}}".\n\nI\'d love to hear more details.',
       waText:'Hi Lital, I\'m interested in the lecture "{{title}}" 🙏',
-      footerTxt:'© 2025 Lital Efraim | All Rights Reserved',
+      footerTxt:'© 2026 Lital Efraim | All Rights Reserved',
       footerTag:'The Journey Begins with Precision',
       footerHome:'Home',
       lectures: [
@@ -581,7 +589,7 @@
         <p class="lec-desc">${l.desc}</p>
         <p class="lec-audience"><strong>${d.audienceLbl}</strong> ${l.audience}</p>
         <div class="lec-btns">
-          <button class="lec-btn" onclick="openModal(${JSON.stringify(d.emailSubject + l.title)})">
+          <button class="lec-btn" data-subject="${d.emailSubject + l.title}" onclick="openModal(this.dataset.subject)">
             ${d.lecBtn}
           </button>
           <a href="https://wa.me/972525672256?text=${encodeURIComponent(d.waText.replace('{{title}}', l.title))}" class="lec-btn lec-btn-wa" target="_blank" rel="noopener">
@@ -646,9 +654,9 @@
 
   // ── MODAL ──
   function openModal(subject) {
-    document.getElementById('formSubject').value = subject || 'פנייה מהאתר';
     document.getElementById('formStatus').className = 'form-status';
     document.getElementById('contactForm').reset();
+    document.getElementById('formSubject').value = subject || 'פנייה מהאתר';
     document.getElementById('contactModal').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
