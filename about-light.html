@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מי אני | ליטל אפרים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Heebo:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --base:        #FAF7F2;
+      --surface:     #F0E9DF;
+      --surface-2:   #E8DDD0;
+      --turquoise:   #0D9488;
+      --teal-dark:   #0E7490;
+      --beige:       #9B7345;
+      --beige-light: #C8A87A;
+      --beige-deep:  #7A5530;
+      --wine:        #6B1929;
+      --wine-vivid:  #8B2A3A;
+      --white:       #FFFFFF;
+      --text:        #0F172A;
+      --gray:        #374151;
+      --gray-dim:    #6B7280;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--base); color: var(--gray); font-family: 'Heebo', sans-serif; overflow-x: hidden; }
+    body.lang-en { font-family: 'Inter', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+    img { max-width: 100%; display: block; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: rgba(155,115,69,0.35); border-radius: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; inset-inline: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 2.5rem;
+      background: rgba(250,247,242,0.92); backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid rgba(155,115,69,0.14);
+      transition: padding 0.3s;
+    }
+    .nav-logo { height: 52px; display: flex; align-items: center; }
+    .nav-logo img { height: 100%; width: auto; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.12)); transition: filter 0.35s; }
+    .nav-logo img:hover { filter: drop-shadow(0 2px 8px rgba(155,115,69,0.35)); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a {
+      color: var(--gray); font-size: 0.875rem; font-weight: 500; letter-spacing: 0.04em;
+      transition: color 0.25s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; inset-inline: 0;
+      height: 1px; background: var(--beige); transform: scaleX(0); transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-links a.active { color: var(--beige-deep); }
+    .nav-links a.active::after { transform: scaleX(1); }
+    .lang-toggle { display: flex; gap: 0.2rem; background: rgba(0,0,0,0.06); border-radius: 8px; padding: 0.25rem; }
+    .lang-btn { padding: 0.35rem 0.85rem; border: none; border-radius: 6px; background: transparent; color: var(--gray); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; transition: all 0.3s; }
+    .lang-btn.active { background: var(--turquoise); color: #fff; }
+    .lang-btn:hover:not(.active) { color: var(--text); background: rgba(0,0,0,0.07); }
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.78rem; color: var(--gray-dim); padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(0,0,0,0.12); border-radius: 20px;
+      transition: all 0.25s; white-space: nowrap; text-decoration: none;
+    }
+    .theme-toggle:hover { color: var(--text); border-color: rgba(0,0,0,0.25); }
+
+    /* ── ABOUT HERO ── */
+    #about-hero {
+      min-height: 60vh; display: flex; align-items: center;
+      padding: 8rem 2rem 5rem;
+      background: linear-gradient(160deg, var(--base) 0%, var(--surface) 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero-grid-about {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(155,115,69,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(155,115,69,0.06) 1px, transparent 1px);
+      background-size: 56px 56px; opacity: 0.6;
+    }
+    .about-hero-inner {
+      max-width: 960px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; gap: 4rem;
+      position: relative; z-index: 1;
+    }
+
+    /* Photo circle */
+    .about-photo-wrap { flex-shrink: 0; }
+    .about-photo-circle {
+      width: 230px; height: 230px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(155,115,69,0.10), rgba(155,115,69,0.04));
+      border: 2.5px dashed rgba(155,115,69,0.32);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.7rem; color: var(--beige); overflow: hidden; position: relative;
+    }
+    .about-photo-circle img.about-real-photo {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+      display: none; /* shown once src is set */
+    }
+    .photo-placeholder-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--beige);
+    }
+    .photo-placeholder-inner span { font-size: 0.68rem; letter-spacing: 0.1em; opacity: 0.65; }
+
+    /* Hero text */
+    .about-hero-text { flex: 1; }
+    .about-pill {
+      display: inline-block; padding: 0.28rem 0.85rem; border-radius: 50px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(155,115,69,0.10); color: var(--beige);
+      border: 1px solid rgba(155,115,69,0.22); margin-bottom: 1.1rem;
+    }
+    .about-hero-name {
+      font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--text) 20%, var(--beige-deep) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    body.lang-he .about-hero-name { font-family: 'Alef', sans-serif; }
+    .about-hero-tagline {
+      font-size: 1.05rem; color: var(--beige-deep); font-weight: 300;
+      letter-spacing: 0.08em; margin-bottom: 1.4rem;
+    }
+    .about-hero-intro { font-size: 1.05rem; line-height: 1.85; color: var(--gray); max-width: 560px; }
+
+    /* ── HIGHLIGHTS ── */
+    #highlights { background: var(--white); padding: 3rem 2rem; }
+    .highlights-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem; max-width: 820px; margin: 0 auto;
+    }
+    .highlight-card {
+      padding: 1.75rem 1.5rem; border-radius: 14px;
+      background: var(--base); border: 1px solid rgba(155,115,69,0.14);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .highlight-card:hover { border-color: rgba(155,115,69,0.3); box-shadow: 0 10px 35px rgba(155,115,69,0.10); transform: translateY(-3px); }
+    .highlight-num { font-size: 2rem; font-weight: 900; color: var(--beige); display: block; font-family: 'Alef', sans-serif; }
+    .highlight-label { font-size: 0.82rem; color: var(--gray-dim); margin-top: 0.35rem; line-height: 1.55; display: block; }
+
+    /* ── ABOUT CONTENT ── */
+    #about-content { background: var(--surface); padding: 5.5rem 2rem; }
+    .about-content-inner { max-width: 760px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; padding: 0.28rem 0.85rem; border-radius: 50px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(155,115,69,0.10); color: var(--beige);
+      border: 1px solid rgba(155,115,69,0.22); margin-bottom: 1.8rem;
+    }
+    .about-section-h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 900; margin-bottom: 2.5rem; color: var(--text);
+    }
+    body.lang-he .about-section-h2 { font-family: 'Alef', sans-serif; }
+    .about-paragraphs { display: flex; flex-direction: column; gap: 1.5rem; }
+    .about-paragraph { font-size: 1.05rem; line-height: 1.9; color: var(--gray); }
+    .about-paragraph strong { color: var(--beige-deep); font-weight: 700; }
+    .about-closing {
+      margin-top: 3rem; padding: 2rem 2.5rem;
+      background: linear-gradient(135deg, rgba(155,115,69,0.09), rgba(155,115,69,0.04));
+      border-radius: 16px; border-inline-start: 3px solid var(--beige);
+      font-size: 1.1rem; font-weight: 500; color: var(--beige-deep);
+      line-height: 1.8; font-style: italic;
+    }
+
+    /* ── CONTACT ── */
+    #contact { background: linear-gradient(180deg, var(--surface) 0%, var(--base) 100%); padding: 6rem 2rem; text-align: center; }
+    .contact-inner { max-width: 560px; margin: 0 auto; }
+    .contact-h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 900; margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--turquoise) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    body.lang-he .contact-h2 { font-family: 'Alef', sans-serif; }
+    .contact-desc { color: var(--gray); line-height: 1.8; margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .contact-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      padding: 1.05rem 2.75rem; background: var(--turquoise);
+      color: white; border-radius: 50px; font-weight: 700; font-size: 1rem;
+      border: none; cursor: pointer; transition: all 0.35s;
+      box-shadow: 0 4px 20px rgba(13,148,136,0.28); text-decoration: none;
+    }
+    .contact-btn:hover { transform: translateY(-3px); background: var(--teal-dark); box-shadow: 0 14px 40px rgba(13,148,136,0.32); }
+    .contact-btn-wa { background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 4px 20px rgba(37,211,102,0.28); }
+    .contact-btn-wa:hover { background: #1ebe5d; box-shadow: 0 14px 40px rgba(37,211,102,0.32); }
+    .contact-btn-li { background: #0A66C2; box-shadow: 0 4px 20px rgba(10,102,194,0.28); }
+    .contact-btn-li:hover { background: #004182; box-shadow: 0 14px 40px rgba(10,102,194,0.32); }
+
+    /* ── FOOTER ── */
+    footer { padding: 1.75rem 2rem; text-align: center; border-top: 1px solid rgba(0,0,0,0.08); color: var(--gray-dim); font-size: 0.8rem; }
+    footer .ft-beige { color: var(--beige); }
+
+    .hairline { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.09), transparent); }
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--gray); border-radius: 2px; }
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(250,247,242,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 1.5rem; font-weight: 700; color: var(--gray); transition: color 0.25s; }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--beige-deep); }
+    .mobile-menu .close-btn { position: absolute; top: 1.5rem; inset-inline-end: 1.5rem; background: none; border: none; color: var(--gray); font-size: 1.75rem; }
+
+    @media (max-width: 820px) {
+      .about-hero-inner { flex-direction: column; gap: 2.5rem; align-items: center; text-align: center; }
+      .about-hero-text { text-align: center; }
+      .about-hero-intro { max-width: 100%; }
+      .highlights-grid { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      nav { padding: 0.75rem 1.25rem; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 520px) {
+      .highlights-grid { grid-template-columns: 1fr; }
+      .about-photo-circle { width: 170px; height: 170px; }
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay { display:none; position:fixed; inset:0; z-index:3000; background:rgba(0,0,0,0.55); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1.5rem; }
+    .modal-overlay.open { display:flex; }
+    .modal-card { background:#fff; border-radius:20px; padding:2.5rem; max-width:480px; width:100%; position:relative; border:1px solid rgba(0,0,0,0.08); box-shadow:0 30px 80px rgba(0,0,0,0.12); animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes modalIn { from{transform:scale(0.92);opacity:0} to{transform:scale(1);opacity:1} }
+    .modal-close { position:absolute; top:1rem; inset-inline-end:1rem; background:none; border:none; color:#64748b; font-size:1rem; cursor:pointer; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background 0.2s,color 0.2s; }
+    .modal-close:hover { background:rgba(0,0,0,0.06); color:#0f172a; }
+    .modal-title { font-size:1.35rem; font-weight:700; margin-bottom:0.3rem; color:#0f172a; }
+    body.lang-he .modal-title { font-family:'Alef',sans-serif; }
+    .modal-subtitle { font-size:0.82rem; color:#64748b; margin-bottom:1.6rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; font-size:0.75rem; color:#475569; margin-bottom:0.35rem; font-weight:600; letter-spacing:0.04em; }
+    .form-group input, .form-group textarea { width:100%; padding:0.65rem 0.9rem; background:rgba(0,0,0,0.03); border:1px solid rgba(0,0,0,0.1); border-radius:10px; color:#0f172a; font-size:0.875rem; font-family:inherit; transition:border-color 0.25s,background 0.25s; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color:#94a3b8; }
+    .form-group input:focus, .form-group textarea:focus { outline:none; border-color:#0d9488; background:rgba(13,148,136,0.04); }
+    .form-group textarea { resize:vertical; min-height:90px; }
+    .form-submit { width:100%; padding:0.85rem; margin-top:0.5rem; background:linear-gradient(135deg,#14B8A6,#0891B2); color:white; border:none; border-radius:50px; font-weight:700; font-size:0.9rem; font-family:inherit; cursor:pointer; transition:all 0.3s; box-shadow:0 4px 20px rgba(20,184,166,0.25); }
+    .form-submit:hover { transform:translateY(-2px); box-shadow:0 10px 35px rgba(20,184,166,0.35); }
+    .form-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+    .form-status { margin-top:0.6rem; padding:0.65rem 0.9rem; border-radius:10px; font-size:0.83rem; text-align:center; display:none; }
+    .form-status.success { background:rgba(22,163,74,0.09); color:#16a34a; border:1px solid rgba(22,163,74,0.2); display:block; }
+    .form-status.error { background:rgba(220,38,38,0.09); color:#dc2626; border:1px solid rgba(220,38,38,0.2); display:block; }
+    @media (max-width:520px) { .form-row{grid-template-columns:1fr} .modal-card{padding:1.75rem} }
+  </style>
+</head>
+<body class="lang-he">
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+    <a href="index-light.html" data-i="nav-home">ראשי</a>
+    <a href="about-light.html" data-i="nav-about" class="active">מי אני</a>
+    <a href="lectures-light.html" data-i="nav-lectures">חוסן והשראה</a>
+    <a href="technology-light.html" data-i="nav-tech">ייעוץ וטכנולוגיה</a>
+    <a href="#contact" data-i="nav-contact">צור קשר</a>
+  </div>
+
+  <nav>
+    <a href="index-light.html" class="nav-logo">
+      <img id="navLogo" src="LOGO_HE_T.png" alt="ליטל אפרים" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="index-light.html" data-i="nav-home">ראשי</a></li>
+      <li><a href="about-light.html" data-i="nav-about" class="active">מי אני</a></li>
+      <li><a href="lectures-light.html" data-i="nav-lectures">חוסן והשראה</a></li>
+      <li><a href="technology-light.html" data-i="nav-tech">ייעוץ וטכנולוגיה</a></li>
+      <li><a href="#contact" data-i="nav-contact">צור קשר</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <a href="index.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span data-i="themeToggle">מצב כהה</span>
+      </a>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
+        <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <!-- ── ABOUT HERO ── -->
+  <section id="about-hero">
+    <div class="hero-grid-about" aria-hidden="true"></div>
+    <div class="about-hero-inner">
+
+      <div class="about-photo-wrap">
+        <div class="about-photo-circle">
+          <!-- כאשר יש תמונה, הוסיפי: <img class="about-real-photo" src="your-photo.jpg" alt="ליטל אפרים"> -->
+          <div class="photo-placeholder-inner" id="aboutPhotoPlaceholder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity="0.45">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+            <span>תמונה בקרוב</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-hero-text fade-up">
+        <span class="about-pill" data-i="aboutPill">מאחורי המצפן</span>
+        <h1 class="about-hero-name" data-i="aboutHeroName">ליטל אפרים</h1>
+        <p class="about-hero-tagline" data-i="aboutHeroTagline">הדרך מתחילה בדיוק</p>
+        <p class="about-hero-intro" data-i="aboutHeroIntro">העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: הדיוק המחקרי והטכנולוגי, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="hairline"></div>
+
+  <!-- ── HIGHLIGHTS ── -->
+  <section id="highlights">
+    <div class="highlights-grid">
+      <div class="highlight-card fade-up">
+        <span class="highlight-num">7</span>
+        <span class="highlight-label" data-i="hl1">שנות שירות כעתודאית וקצינה בצה״ל</span>
+      </div>
+      <div class="highlight-card fade-up">
+        <span class="highlight-num">M.Sc</span>
+        <span class="highlight-label" data-i="hl2">תואר שני מחקרי — מיפוי וגיאו-אינפורמציה, הטכניון</span>
+      </div>
+      <div class="highlight-card fade-up">
+        <span class="highlight-num">2</span>
+        <span class="highlight-label" data-i="hl3">עולמות ידע: טכנולוגיה וחוסן אנושי — יחד</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="hairline"></div>
+
+  <!-- ── ABOUT CONTENT ── -->
+  <section id="about-content">
+    <div class="about-content-inner">
+      <span class="section-label" data-i="contentLabel">הסיפור שלי</span>
+      <h2 class="about-section-h2 fade-up" data-i="aboutH2">ליטל אפרים, נעים להכיר!</h2>
+
+      <div class="about-paragraphs">
+        <p class="about-paragraph fade-up" data-i="p1">
+          העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.
+        </p>
+        <p class="about-paragraph fade-up" data-i="p2">
+          את היכולת לצלול אל מרחבי ידע חדשים במהירות ולראות מערכות בצורה רחבה ומערכתית, גיבשתי במהלך <strong>שבע שנות שירות כעתודאית וקצינה בצה״ל</strong>. משם המשכתי להעמקת התשתית המדעית והמחקרית שלי, וכיום אני לקראת סיום <strong>תואר שני מחקרי (M.Sc) בתחום המיפוי והגיאו-אינפורמציה בטכניון</strong>.
+        </p>
+        <p class="about-paragraph fade-up" data-i="p3">
+          בעולם הטכנולוגי, המומחיות שלי הינה בפיצוח משימות אלגוריתמיות, ביצוע מחקר יישומי וייעוץ תיאורטי חכם בעולמות ה-Spatial AI. החוזקה שלי טמונה בחיבור שבין הידע האקדמי הרחב שבראש לבין היכולת לתרגם אותו כיום למימוש מעשי ומהיר בעזרת <strong>כלי בינה מלאכותית מתקדמים</strong>. את הידע הזה אני מביאה איתי גם אל הבמה והכיתה, דרך הרצאות טכנולוגיות, קורסים והדרכות ייעודיות לחברות מיפוי וארגונים.
+        </p>
+        <p class="about-paragraph fade-up" data-i="p4">
+          לצד העבודה האנליטית, מסע החיים האישי שלי עיצב בי <strong>חוסן נפשי ומנטלי בלתי מתפשר</strong>, מתוך התמודדות יומיומית ועיקשת עם פוסט-טראומה מורכבת שאינה ניתנת להעלמה. בעקבות הניסיון החי הזה, פיתחתי הבנה עמוקה של האתגרים השקופים המלווים את הנפש האנושית, ומצאתי את הכלים לנווט מתוך נקודות משבר ואי-ודאות אל עבר תפקוד שיא ומצוינות.
+        </p>
+        <p class="about-paragraph fade-up" data-i="p5">
+          את התובנות הללו אני מתרגמת לעשייה יישומית בשטח: החל מליווי מקצועי והענקת כלים לצוותי טיפול ושיקום, דרך הובלת תהליכי חוסן בארגונים, ועד להרצאות השראה ומנטורינג לבני נוער ולנשים השואפות והשואפים <strong>לפרוץ תקרות זכוכית ולהוביל מתוך נקודות פתיחה מורכבות</strong>.
+        </p>
+        <p class="about-paragraph fade-up" data-i="p6">
+          השילוב הזה – בין החשיבה המחקרית וההדרכה הטכנולוגית לבין היכולת לפתח חוסן אנושי – הוא הערך המאוזן והאמיתי שאני מביאה איתי לכל מפגש, פרויקט או הרצאה.
+        </p>
+      </div>
+
+      <div class="about-closing fade-up" data-i="aboutClosing">
+        אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.
+      </div>
+    </div>
+  </section>
+
+  <div class="hairline"></div>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="contact-inner">
+      <h2 class="contact-h2" data-i="contactH2">בואו נדבר</h2>
+      <p class="contact-desc" data-i="contactDesc">מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?</p>
+      <div class="contact-btns">
+        <button class="contact-btn" onclick="openModal('פנייה מהאתר')">
+          <span data-i="contactCta">צרו קשר</span>
+        </button>
+        <a href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים"
+           class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
+          <span data-i="contactWa">WhatsApp</span>
+        </a>
+        <a href="https://www.linkedin.com/in/lital-efraim"
+           class="contact-btn contact-btn-li" target="_blank" rel="noopener">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-i="footerTxt">© 2026 </span><span class="ft-beige">ליטל אפרים</span>
+    <span data-i="footerSep"> · </span>
+    <span style="color:var(--beige)" data-i="footerTag">הדרך מתחילה בדיוק</span>
+  </footer>
+
+  <script>
+  const T = {
+    he: {
+      dir:'rtl', lang:'he', logo:'LOGO_HE_T.png',
+      pageTitle:'מי אני | ליטל אפרים',
+      'nav-home':'ראשי','nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
+      themeToggle:'מצב כהה',
+      aboutPill:'מאחורי המצפן',
+      aboutHeroName:'ליטל אפרים',
+      aboutHeroTagline:'הדרך מתחילה בדיוק',
+      aboutHeroIntro:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: הדיוק המחקרי והטכנולוגי, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
+      hl1:'שנות שירות כעתודאית וקצינה בצה״ל',
+      hl2:'תואר שני מחקרי — מיפוי וגיאו-אינפורמציה, הטכניון',
+      hl3:'עולמות ידע: טכנולוגיה וחוסן אנושי — יחד',
+      contentLabel:'הסיפור שלי',
+      aboutH2:'ליטל אפרים, נעים להכיר!',
+      p1:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
+      p2:'את היכולת לצלול אל מרחבי ידע חדשים במהירות ולראות מערכות בצורה רחבה ומערכתית, גיבשתי במהלך <strong>שבע שנות שירות כעתודאית וקצינה בצה״ל</strong>. משם המשכתי להעמקת התשתית המדעית והמחקרית שלי, וכיום אני לקראת סיום <strong>תואר שני מחקרי (M.Sc) בתחום המיפוי והגיאו-אינפורמציה בטכניון</strong>.',
+      p3:'בעולם הטכנולוגי, המומחיות שלי הינה בפיצוח משימות אלגוריתמיות, ביצוע מחקר יישומי וייעוץ תיאורטי חכם בעולמות ה-Spatial AI. החוזקה שלי טמונה בחיבור שבין הידע האקדמי הרחב שבראש לבין היכולת לתרגם אותו כיום למימוש מעשי ומהיר בעזרת <strong>כלי בינה מלאכותית מתקדמים</strong>. את הידע הזה אני מביאה איתי גם אל הבמה והכיתה, דרך הרצאות טכנולוגיות, קורסים והדרכות ייעודיות לחברות מיפוי וארגונים.',
+      p4:'לצד העבודה האנליטית, מסע החיים האישי שלי עיצב בי <strong>חוסן נפשי ומנטלי בלתי מתפשר</strong>, מתוך התמודדות יומיומית ועיקשת עם פוסט-טראומה מורכבת שאינה ניתנת להעלמה. בעקבות הניסיון החי הזה, פיתחתי הבנה עמוקה של האתגרים השקופים המלווים את הנפש האנושית, ומצאתי את הכלים לנווט מתוך נקודות משבר ואי-ודאות אל עבר תפקוד שיא ומצוינות.',
+      p5:'את התובנות הללו אני מתרגמת לעשייה יישומית בשטח: החל מליווי מקצועי והענקת כלים לצוותי טיפול ושיקום, דרך הובלת תהליכי חוסן בארגונים, ועד להרצאות השראה ומנטורינג לבני נוער ולנשים השואפות והשואפים <strong>לפרוץ תקרות זכוכית ולהוביל מתוך נקודות פתיחה מורכבות</strong>.',
+      p6:'השילוב הזה – בין החשיבה המחקרית וההדרכה הטכנולוגית לבין היכולת לפתח חוסן אנושי – הוא הערך המאוזן והאמיתי שאני מביאה איתי לכל מפגש, פרויקט או הרצאה.',
+      aboutClosing:'אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.',
+      contactH2:'בואו נדבר', contactDesc:'מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?', contactCta:'צרו קשר', contactWa:'WhatsApp',
+      footerTxt:'© 2026 ', footerSep:' · ', footerTag:'הדרך מתחילה בדיוק',
+    },
+    en: {
+      dir:'ltr', lang:'en', logo:'LOGO_EN_T.png',
+      pageTitle:'About | Lital Efraim',
+      'nav-home':'Home','nav-about':'About','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
+      themeToggle:'Dark Mode',
+      aboutPill:'Behind the Compass',
+      aboutHeroName:'Lital Efraim',
+      aboutHeroTagline:'The Journey Begins with Precision',
+      aboutHeroIntro:'My work is driven by a deep connection to two complementary worlds: scientific and technological precision, and human mental resilience. I believe that whether solving an algorithmic challenge or navigating personal complexity — the journey always begins with precision.',
+      hl1:'Years of service as a reserve officer in the IDF',
+      hl2:'Research M.Sc — Mapping & Geo-Information, Technion',
+      hl3:'Two knowledge worlds: technology & human resilience — together',
+      contentLabel:'My Story',
+      aboutH2:'Lital Efraim, Nice to Meet You!',
+      p1:'My work is driven by a deep connection to two complementary worlds: <strong>scientific and technological precision</strong>, and human mental resilience. I believe that whether solving an algorithmic challenge or navigating personal complexity — the journey always begins with precision.',
+      p2:'The ability to dive quickly into new knowledge domains and see systems broadly was shaped during <strong>seven years of service as a reserve officer in the IDF</strong>. From there I deepened my scientific foundation, and today I am nearing completion of a <strong>research M.Sc in Mapping and Geo-Information at the Technion</strong>.',
+      p3:'In the technological world, my expertise lies in cracking algorithmic challenges, applied research, and smart theoretical consulting in <strong>Spatial AI</strong>. My strength is bridging broad academic knowledge with the ability to translate it into fast, practical implementation using advanced AI tools — and bringing this knowledge to the stage through technology lectures, courses, and workshops.',
+      p4:'Alongside analytical work, my personal life journey forged <strong>unwavering mental resilience</strong>, through daily coping with complex PTSD that cannot be erased. From this lived experience, I developed a deep understanding of invisible challenges and found tools to navigate from crisis and uncertainty toward peak performance and excellence.',
+      p5:'I translate these insights into practical field work: from mentoring therapeutic teams, to leading organizational resilience processes, to inspirational talks and mentoring for youth and women aspiring to <strong>break glass ceilings and lead from complex starting points</strong>.',
+      p6:'This combination — analytical thinking, technological guidance, and the ability to cultivate human resilience — is the authentic value I bring to every meeting, project, or lecture.',
+      aboutClosing:'I invite you to navigate together with me, and find your precise coordinates.',
+      contactH2:"Let's Talk", contactDesc:'Looking for an inspiring lecture, an advanced technology solution, or just want to learn more?', contactCta:'Get in Touch', contactWa:'WhatsApp',
+      footerTxt:'© 2026 ', footerSep:' · ', footerTag:'The Journey Begins with Precision',
+    }
+  };
+
+  function setLang(lang) {
+    localStorage.setItem('lang', lang);
+    const d = T[lang];
+    document.documentElement.setAttribute('dir', d.dir);
+    document.documentElement.setAttribute('lang', d.lang);
+    document.body.classList.toggle('lang-he', lang==='he');
+    document.body.classList.toggle('lang-en', lang==='en');
+    document.title = d.pageTitle;
+    document.getElementById('navLogo').src = d.logo;
+    document.querySelectorAll('[data-i]').forEach(el => {
+      const v = d[el.getAttribute('data-i')];
+      if (v !== undefined) el.innerHTML = v;
+    });
+    document.getElementById('btnHe').classList.toggle('active', lang==='he');
+    document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  }
+
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  let obs;
+  function initObs() {
+    if (obs) obs.disconnect();
+    obs = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    }), { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+  }
+
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.padding = window.scrollY > 60 ? '0.5rem 2.5rem' : '0.75rem 2.5rem';
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('lang') || 'he';
+    setLang(saved); requestAnimationFrame(initObs);
+  });
+
+  function openModal(subject) {
+    document.getElementById('formSubject').value = subject || 'פנייה מהאתר';
+    document.getElementById('formStatus').className = 'form-status';
+    document.getElementById('contactForm').reset();
+    document.getElementById('contactModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(e) { if (e.target === document.getElementById('contactModal')) closeModalBtn(); }
+  function closeModalBtn() { document.getElementById('contactModal').classList.remove('open'); document.body.style.overflow = ''; }
+  async function submitForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('formSubmitBtn');
+    const status = document.getElementById('formStatus');
+    btn.disabled = true; btn.textContent = 'שולח...';
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(e.target) });
+      const data = await res.json();
+      if (data.success) { status.className = 'form-status success'; status.textContent = 'ההודעה נשלחה! אחזור אליך בהקדם.'; e.target.reset(); setTimeout(closeModalBtn, 3000); }
+      else throw new Error();
+    } catch { status.className = 'form-status error'; status.textContent = 'שגיאה בשליחה. ניתן לפנות ישירות: litalefraim103@gmail.com'; }
+    btn.disabled = false; btn.textContent = 'שלח הודעה';
+  }
+  </script>
+
+  <div class="modal-overlay" id="contactModal" onclick="closeModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+      <h3 class="modal-title">בואו נדבר</h3>
+      <p class="modal-subtitle">השאירו פרטים ואחזור אליכם בהקדם</p>
+      <form id="contactForm" onsubmit="submitForm(event)">
+        <input type="hidden" name="access_key" value="2eab271c-d761-4c7f-8350-4872e003db42">
+        <input type="hidden" name="subject" id="formSubject" value="פנייה מהאתר">
+        <input type="hidden" name="redirect" value="false">
+        <div class="form-row">
+          <div class="form-group"><label>שם מלא *</label><input type="text" name="name" required placeholder="ישראל ישראלי"></div>
+          <div class="form-group"><label>טלפון</label><input type="tel" name="phone" placeholder="050-0000000"></div>
+        </div>
+        <div class="form-group"><label>אימייל *</label><input type="email" name="email" required placeholder="your@email.com"></div>
+        <div class="form-group"><label>הודעה *</label><textarea name="message" required placeholder="ספרו לי במה אוכל לעזור..."></textarea></div>
+        <div class="form-status" id="formStatus"></div>
+        <button type="submit" class="form-submit" id="formSubmitBtn">שלח הודעה</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
