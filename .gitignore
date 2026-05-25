@@ -4,6 +4,10 @@
 # Archive / backup copies
 Archive/
 
+# Internal folders (not part of website)
+dark_version/
+הרצאות/
+
 # Office documents (not needed on website)
 *.docx
 *.pptx
