@@ -52,7 +52,10 @@
     }
     .nav-logo { height: 52px; display: flex; align-items: center; }
     .nav-logo img { height: 100%; width: auto; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.12)); transition: filter 0.35s; }
+    /* EN strokes are bolder on white — reduce contrast to equalise weight */
+    body.lang-en .nav-logo img { filter: brightness(1.1) contrast(0.85) drop-shadow(0 1px 4px rgba(0,0,0,0.08)); }
     .nav-logo img:hover { filter: drop-shadow(0 2px 8px rgba(155,115,69,0.35)); }
+    body.lang-en .nav-logo img:hover { filter: brightness(1.1) contrast(0.85) drop-shadow(0 2px 8px rgba(155,115,69,0.35)); }
 
     .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
     .nav-links a {
@@ -126,20 +129,21 @@
 
     .hero-content { position: relative; z-index: 1; max-width: 940px; width: 100%; }
 
-    /* Compass — dark watermark on light background */
+    /* Compass watermark — uses LOGO_EMBEDDED.png (compass graphic only, no text) */
     .hero-compass-wrap {
-      width: 220px; height: 220px; overflow: hidden;
+      width: 300px; height: 300px; overflow: hidden;
       margin: 0 auto 2rem;
     }
     .hero-compass {
-      width: 220px; height: 220px; object-fit: contain;
-      display: block; opacity: 0.12;
-      filter: brightness(0.15) saturate(0.4) contrast(1.5);
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block; opacity: 0.30;
+      filter: brightness(0.25) saturate(0.6) contrast(1.3) drop-shadow(0 0 14px rgba(155,42,64,0.18));
       animation: compassGlow 6s ease-in-out infinite;
     }
     @keyframes compassGlow {
-      0%,100% { opacity: 0.10; }
-      50%     { opacity: 0.17; }
+      0%,100% { opacity: 0.26; }
+      50%     { opacity: 0.38; }
     }
 
     .hero-name {
@@ -420,7 +424,7 @@
 
     <div class="hero-content">
       <div class="hero-compass-wrap">
-        <img class="hero-compass" id="heroCompass" src="LOGO_HE_T.png" alt="" aria-hidden="true" />
+        <img class="hero-compass" id="heroCompass" src="LOGO_EMBEDDED.png" alt="" aria-hidden="true" />
       </div>
       <h1 class="hero-name" data-i="heroName">ליטל אפרים</h1>
       <p class="hero-tagline" data-i="heroTagline">הדרך מתחילה בדיוק</p>
@@ -589,7 +593,7 @@
     document.body.classList.toggle('lang-en', lang==='en');
     document.title = d.pageTitle;
     document.getElementById('navLogo').src    = d.logo;
-    document.getElementById('heroCompass').src = d.logo;
+    // heroCompass always uses LOGO_EMBEDDED.png — no swap needed
     document.querySelectorAll('[data-i]').forEach(el => {
       const v = d[el.getAttribute('data-i')];
       if (v !== undefined) el.innerHTML = v;
