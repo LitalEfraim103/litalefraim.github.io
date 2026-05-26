@@ -29,7 +29,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       background: var(--base); color: var(--white);
       font-family: 'Heebo', sans-serif; overflow-x: hidden;
@@ -468,10 +468,11 @@
       <h2 class="contact-h2" data-i="contactH2">הזמינו הרצאה</h2>
       <p class="contact-desc"  data-i="contactDesc">מחפשים הרצאה מעוררת השראה לארגון, יום עיון, כנס, או קהל מגוון? בואו נבנה יחד את החוויה המתאימה לכם.</p>
       <div class="contact-btns">
-        <button class="contact-btn" onclick="openModal('הזמנת הרצאה')">
+        <button class="contact-btn" onclick="openModal()">
           <span data-i="contactCta">הזמינו הרצאה</span>
         </button>
-        <a href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בהרצאה"
+        <a id="waBtn"
+           href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בהרצאה"
            class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
           <span data-i="contactWa">WhatsApp</span>
         </a>
@@ -514,6 +515,7 @@
       contactDesc:'מחפשים הרצאה מעוררת השראה לארגון, יום עיון, כנס, או קהל מגוון? בואו נבנה יחד את החוויה המתאימה לכם.',
       contactCta:'הזמינו הרצאה', contactWa:'WhatsApp',
       waBtn:'WhatsApp',
+      waUrl:'https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בהרצאה',
       emailSubject:'הזמנת הרצאה: ',
       emailBody:'שלום ליטל,\n\nאני מעוניין/ת בהרצאה "{{title}}".\n\nאשמח לשמוע פרטים.',
       waText:'היי ליטל, אני מתעניין/ת בהרצאה "{{title}}" 🙏',
@@ -565,6 +567,7 @@
       contactDesc:'Looking for an inspiring lecture for your organization, conference, or diverse audience? Let\'s build the right experience together.',
       contactCta:'Book a Lecture', contactWa:'WhatsApp',
       waBtn:'WhatsApp',
+      waUrl:"https://wa.me/972525672256?text=Hi%20Lital%2C%20I'm%20interested%20in%20your%20lectures",
       emailSubject:'Book a Lecture: ',
       emailBody:'Hi Lital,\n\nI\'m interested in the lecture "{{title}}".\n\nI\'d love to hear more details.',
       waText:'Hi Lital, I\'m interested in the lecture "{{title}}" 🙏',
@@ -640,6 +643,9 @@
     });
     document.getElementById('btnHe').classList.toggle('active', lang==='he');
     document.getElementById('btnEn').classList.toggle('active', lang==='en');
+    // Update WhatsApp URL
+    const waBtn = document.getElementById('waBtn');
+    if (waBtn && d.waUrl) waBtn.href = d.waUrl;
 
     // Show Hebrew lecture cards OR English "coming soon" page
     const lecturesWrapper = document.getElementById('lecturesWrapper');

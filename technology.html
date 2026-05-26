@@ -29,7 +29,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       background: var(--base); color: var(--white);
       font-family: 'Heebo', sans-serif; overflow-x: hidden;
@@ -430,9 +430,10 @@
         <button class="contact-btn" onclick="openModal()">
           <span data-i="contactCta">צרו קשר</span>
         </button>
-        <a href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בייעוץ%20טכנולוגי"
+        <a id="waBtn"
+           href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בייעוץ%20טכנולוגי"
            class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
-          WhatsApp
+          <span data-i="contactWa">WhatsApp</span>
         </a>
         <a href="https://www.linkedin.com/in/lital-efraim"
            class="contact-btn contact-btn-li" target="_blank" rel="noopener">
@@ -470,7 +471,8 @@
       quoteRest:' הוא המצפן שהופך תובנה עמוקה לפתרון ממוקד.״',
       contactH2:'בואו נבנה יחד',
       contactDesc:'מחפשים ייעוץ טכנולוגי מתקדם, הדרכת צוות, או עזרה בהטמעת בינה מלאכותית? נשמח לדבר.',
-      contactCta:'צרו קשר',
+      contactCta:'צרו קשר', contactWa:'WhatsApp',
+      waUrl:'https://wa.me/972525672256?text=היי%20ליטל%2C%20אני%20מתעניין%2Fת%20בייעוץ%20טכנולוגי',
       modalTitle:'בואו נדבר', modalSubtitle:'השאירו פרטים ואחזור אליכם בהקדם',
       labelName:'שם מלא *', labelPhone:'טלפון', labelEmail:'אימייל *', labelMsg:'הודעה *',
       phName:'ישראל ישראלי', phPhone:'050-0000000', phMsg:'ספרו לי במה אוכל לעזור...',
@@ -513,7 +515,8 @@
       quoteRest:' it is the compass that turns deep insight into a focused solution."',
       contactH2:"Let's Build Together",
       contactDesc:'Looking for advanced technology consulting, team training, or help implementing AI? We\'d love to talk.',
-      contactCta:'Get in Touch',
+      contactCta:'Get in Touch', contactWa:'WhatsApp',
+      waUrl:"https://wa.me/972525672256?text=Hi%20Lital%2C%20I'm%20interested%20in%20technology%20consulting",
       modalTitle:"Let's Talk", modalSubtitle:"Leave your details and I'll get back to you soon",
       labelName:'Full Name *', labelPhone:'Phone', labelEmail:'Email *', labelMsg:'Message *',
       phName:'Jane Doe', phPhone:'+972-50-000-0000', phMsg:'Tell me how I can help...',
@@ -583,6 +586,9 @@
     });
     document.getElementById('btnHe').classList.toggle('active', lang==='he');
     document.getElementById('btnEn').classList.toggle('active', lang==='en');
+    // Update WhatsApp URL
+    const waBtn = document.getElementById('waBtn');
+    if (waBtn && d.waUrl) waBtn.href = d.waUrl;
     buildServices(lang);
     buildCaps(lang);
     requestAnimationFrame(initObs);

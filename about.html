@@ -25,7 +25,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body { background: var(--base); color: var(--white); font-family: 'Heebo', sans-serif; overflow-x: hidden; }
     body.lang-en { font-family: 'Inter', sans-serif; }
     a { text-decoration: none; color: inherit; }
@@ -361,7 +361,8 @@
         <button class="contact-btn" onclick="openModal()">
           <span data-i="contactCta">צרו קשר</span>
         </button>
-        <a href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים"
+        <a id="waBtn"
+           href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים"
            class="contact-btn contact-btn-wa" target="_blank" rel="noopener">
           <span data-i="contactWa">WhatsApp</span>
         </a>
@@ -398,6 +399,7 @@
       p6:'השילוב הזה – בין החשיבה המחקרית וההדרכה הטכנולוגית לבין היכולת לפתח חוסן אנושי – הוא הערך המאוזן והאמיתי שאני מביאה איתי לכל מפגש, פרויקט או הרצאה.',
       aboutClosing:'אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.',
       contactH2:'בואו נדבר', contactDesc:'מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?', contactCta:'צרו קשר', contactWa:'WhatsApp',
+      waUrl:'https://wa.me/972525672256?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים',
       modalTitle:'בואו נדבר', modalSubtitle:'השאירו פרטים ואחזור אליכם בהקדם',
       labelName:'שם מלא *', labelPhone:'טלפון', labelEmail:'אימייל *', labelMsg:'הודעה *',
       phName:'ישראל ישראלי', phPhone:'050-0000000', phMsg:'ספרו לי במה אוכל לעזור...',
@@ -426,6 +428,7 @@
       p6:'This combination — analytical thinking, technological guidance, and the ability to cultivate human resilience — is the authentic value I bring to every meeting, project, or lecture.',
       aboutClosing:'I invite you to navigate together with me, and find your precise coordinates.',
       contactH2:"Let's Talk", contactDesc:'Looking for an inspiring lecture, an advanced technology solution, or just want to learn more?', contactCta:'Get in Touch', contactWa:'WhatsApp',
+      waUrl:"https://wa.me/972525672256?text=Hi%20Lital%2C%20I'd%20love%20to%20hear%20more%20details",
       modalTitle:"Let's Talk", modalSubtitle:"Leave your details and I'll get back to you soon",
       labelName:'Full Name *', labelPhone:'Phone', labelEmail:'Email *', labelMsg:'Message *',
       phName:'Jane Doe', phPhone:'+972-50-000-0000', phMsg:'Tell me how I can help...',
@@ -458,6 +461,9 @@
     });
     document.getElementById('btnHe').classList.toggle('active', lang==='he');
     document.getElementById('btnEn').classList.toggle('active', lang==='en');
+    // Update WhatsApp URL
+    const waBtn = document.getElementById('waBtn');
+    if (waBtn && d.waUrl) waBtn.href = d.waUrl;
   }
 
   function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
