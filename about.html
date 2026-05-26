@@ -358,7 +358,7 @@
       <h2 class="contact-h2" data-i="contactH2">בואו נדבר</h2>
       <p class="contact-desc" data-i="contactDesc">מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?</p>
       <div class="contact-btns">
-        <button class="contact-btn" onclick="openModal('פנייה מהאתר')">
+        <button class="contact-btn" onclick="openModal()">
           <span data-i="contactCta">צרו קשר</span>
         </button>
         <a href="https://wa.me/972525672256?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים"
@@ -398,6 +398,15 @@
       p6:'השילוב הזה – בין החשיבה המחקרית וההדרכה הטכנולוגית לבין היכולת לפתח חוסן אנושי – הוא הערך המאוזן והאמיתי שאני מביאה איתי לכל מפגש, פרויקט או הרצאה.',
       aboutClosing:'אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.',
       contactH2:'בואו נדבר', contactDesc:'מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?', contactCta:'צרו קשר', contactWa:'WhatsApp',
+      modalTitle:'בואו נדבר', modalSubtitle:'השאירו פרטים ואחזור אליכם בהקדם',
+      labelName:'שם מלא *', labelPhone:'טלפון', labelEmail:'אימייל *', labelMsg:'הודעה *',
+      phName:'ישראל ישראלי', phPhone:'050-0000000', phMsg:'ספרו לי במה אוכל לעזור...',
+      formSubmit:'שלח הודעה', formSending:'שולח...',
+      formSuccess:'ההודעה נשלחה! אחזור אליך בהקדם.',
+      formError:'שגיאה בשליחה. ניתן לפנות ישירות: litalefraim103@gmail.com',
+      errPhone:'מספר הטלפון אינו תקין — נא להזין מספר ישראלי (לדוגמה: 050-1234567)',
+      errMsg:'נא לכתוב הודעה קצרה — במה אוכל לעזור?',
+      formSubjectDefault:'פנייה מהאתר',
       footerTxt:'© 2026 ', footerSep:' · ', footerTag:'הדרך מתחילה בדיוק',
     },
     en: {
@@ -417,6 +426,15 @@
       p6:'This combination — analytical thinking, technological guidance, and the ability to cultivate human resilience — is the authentic value I bring to every meeting, project, or lecture.',
       aboutClosing:'I invite you to navigate together with me, and find your precise coordinates.',
       contactH2:"Let's Talk", contactDesc:'Looking for an inspiring lecture, an advanced technology solution, or just want to learn more?', contactCta:'Get in Touch', contactWa:'WhatsApp',
+      modalTitle:"Let's Talk", modalSubtitle:"Leave your details and I'll get back to you soon",
+      labelName:'Full Name *', labelPhone:'Phone', labelEmail:'Email *', labelMsg:'Message *',
+      phName:'Jane Doe', phPhone:'+972-50-000-0000', phMsg:'Tell me how I can help...',
+      formSubmit:'Send Message', formSending:'Sending…',
+      formSuccess:"Message sent! I'll get back to you soon.",
+      formError:'Sending failed. You can reach me directly: litalefraim103@gmail.com',
+      errPhone:'Invalid phone number — please enter an Israeli number (e.g. 050-1234567)',
+      errMsg:'Please write a short message — how can I help?',
+      formSubjectDefault:'Inquiry from About Page',
       footerTxt:'© 2026 ', footerSep:' · ', footerTag:'The Journey Begins with Precision',
     }
   };
@@ -433,6 +451,10 @@
     document.querySelectorAll('[data-i]').forEach(el => {
       const v = d[el.getAttribute('data-i')];
       if (v !== undefined) el.innerHTML = v;
+    });
+    document.querySelectorAll('[data-ph]').forEach(el => {
+      const v = d[el.getAttribute('data-ph')];
+      if (v !== undefined) el.placeholder = v;
     });
     document.getElementById('btnHe').classList.toggle('active', lang==='he');
     document.getElementById('btnEn').classList.toggle('active', lang==='en');
@@ -459,8 +481,10 @@
   });
 
   function openModal(subject) {
+    const lang = localStorage.getItem('lang') || 'he';
+    const d = T[lang];
     document.getElementById('contactForm').reset();
-    document.getElementById('formSubject').value = subject || 'פנייה מהאתר';
+    document.getElementById('formSubject').value = subject || d.formSubjectDefault;
     document.getElementById('formStatus').className = 'form-status';
     document.getElementById('contactModal').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -469,60 +493,62 @@
   function closeModalBtn() { document.getElementById('contactModal').classList.remove('open'); document.body.style.overflow = ''; }
   async function submitForm(e) {
     e.preventDefault();
+    const lang = localStorage.getItem('lang') || 'he';
+    const d = T[lang];
     const btn = document.getElementById('formSubmitBtn');
     const status = document.getElementById('formStatus');
     status.className = 'form-status';
 
-    // ── ולידציה: טלפון (אם הוזן) ──
+    // ── Phone validation ──
     const phoneEl = e.target.querySelector('[name="phone"]');
     const phoneVal = phoneEl ? phoneEl.value.trim() : '';
     if (phoneVal) {
       const digits = phoneVal.replace(/[\s\-\+\(\)]/g, '');
       if (!/^(972[0-9]{9}|0[0-9]{8,9})$/.test(digits)) {
         status.className = 'form-status error';
-        status.textContent = 'מספר הטלפון אינו תקין — נא להזין מספר ישראלי (לדוגמה: 050-1234567)';
+        status.textContent = d.errPhone;
         phoneEl.focus();
         return;
       }
     }
 
-    // ── ולידציה: תוכן הודעה ──
+    // ── Message validation ──
     const msgEl = e.target.querySelector('[name="message"]');
     if (msgEl && msgEl.value.trim().length < 2) {
       status.className = 'form-status error';
-      status.textContent = 'נא לכתוב הודעה קצרה — במה אוכל לעזור?';
+      status.textContent = d.errMsg;
       msgEl.focus();
       return;
     }
 
-    btn.disabled = true; btn.textContent = 'שולח...';
+    btn.disabled = true; btn.textContent = d.formSending;
     try {
       const res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(e.target) });
       const data = await res.json();
-      if (data.success) { status.className = 'form-status success'; status.textContent = 'ההודעה נשלחה! אחזור אליך בהקדם.'; e.target.reset(); setTimeout(closeModalBtn, 3000); }
+      if (data.success) { status.className = 'form-status success'; status.textContent = d.formSuccess; e.target.reset(); setTimeout(closeModalBtn, 3000); }
       else throw new Error();
-    } catch { status.className = 'form-status error'; status.textContent = 'שגיאה בשליחה. ניתן לפנות ישירות: litalefraim103@gmail.com'; }
-    btn.disabled = false; btn.textContent = 'שלח הודעה';
+    } catch { status.className = 'form-status error'; status.textContent = d.formError; }
+    btn.disabled = false; btn.textContent = d.formSubmit;
   }
   </script>
 
   <div class="modal-overlay" id="contactModal" onclick="closeModal(event)">
     <div class="modal-card">
       <button class="modal-close" onclick="closeModalBtn()">✕</button>
-      <h3 class="modal-title">בואו נדבר</h3>
-      <p class="modal-subtitle">השאירו פרטים ואחזור אליכם בהקדם</p>
+      <h3 class="modal-title" data-i="modalTitle">בואו נדבר</h3>
+      <p class="modal-subtitle" data-i="modalSubtitle">השאירו פרטים ואחזור אליכם בהקדם</p>
       <form id="contactForm" onsubmit="submitForm(event)">
         <input type="hidden" name="access_key" value="2eab271c-d761-4c7f-8350-4872e003db42">
         <input type="hidden" name="subject" id="formSubject" value="פנייה מהאתר">
         <input type="hidden" name="redirect" value="false">
         <div class="form-row">
-          <div class="form-group"><label>שם מלא *</label><input type="text" name="name" required placeholder="ישראל ישראלי"></div>
-          <div class="form-group"><label>טלפון</label><input type="tel" name="phone" placeholder="050-0000000"></div>
+          <div class="form-group"><label data-i="labelName">שם מלא *</label><input type="text" name="name" required placeholder="ישראל ישראלי" data-ph="phName"></div>
+          <div class="form-group"><label data-i="labelPhone">טלפון</label><input type="tel" name="phone" placeholder="050-0000000" data-ph="phPhone"></div>
         </div>
-        <div class="form-group"><label>אימייל *</label><input type="email" name="email" required placeholder="your@email.com"></div>
-        <div class="form-group"><label>הודעה *</label><textarea name="message" required placeholder="ספרו לי במה אוכל לעזור..."></textarea></div>
+        <div class="form-group"><label data-i="labelEmail">אימייל *</label><input type="email" name="email" required placeholder="your@email.com"></div>
+        <div class="form-group"><label data-i="labelMsg">הודעה *</label><textarea name="message" required placeholder="ספרו לי במה אוכל לעזור..." data-ph="phMsg"></textarea></div>
         <div class="form-status" id="formStatus"></div>
-        <button type="submit" class="form-submit" id="formSubmitBtn">שלח הודעה</button>
+        <button type="submit" class="form-submit" id="formSubmitBtn" data-i="formSubmit">שלח הודעה</button>
       </form>
     </div>
   </div>
