@@ -447,7 +447,7 @@
       <li><a href="#contact"             data-i="nav-contact">צור קשר</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:0.75rem">
-      <a href="index.html" class="theme-toggle" onclick="event.preventDefault();localStorage.setItem('theme','dark');try{localStorage.setItem('scrollY',window.scrollY);localStorage.setItem('scrollYTime',Date.now());localStorage.setItem('zoomIdx',typeof currentZoomIdx!=='undefined'?currentZoomIdx:2)}catch(e){}window.location.href='index.html'"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span data-i="themeToggle">מצב כהה</span></a>
+      <a href="index.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark');try{localStorage.setItem('scrollY',window.scrollY);localStorage.setItem('scrollYTime',Date.now());localStorage.setItem('zoomIdx',typeof currentZoomIdx!=='undefined'?currentZoomIdx:2)}catch(e){}"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span data-i="themeToggle">מצב כהה</span></a>
       <div class="zoom-toggle" title="גודל טקסט">
         <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט" data-i="zoomOut">א−</button>
         <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט" data-i="zoomIn">א+</button>
