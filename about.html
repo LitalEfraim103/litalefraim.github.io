@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.75, maximum-scale=1.5" />
-  <script>if(localStorage.getItem('theme')!=='dark')location.replace('about-light.html');</script>
+  <script>if(localStorage.getItem('theme')!=='dark')location.replace('about-light.html');if('scrollRestoration' in history)history.scrollRestoration='manual';</script>
   <title>מי אני | ליטל אפרים</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,6 +71,13 @@
       transition: all 0.25s; white-space: nowrap; text-decoration: none;
     }
     .theme-toggle:hover { color: var(--white); border-color: rgba(255,255,255,0.28); }
+
+    /* ── ZOOM TOGGLE ── */
+    .zoom-toggle { display: flex; gap: 0.15rem; background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.25rem; direction: ltr; }
+    .zoom-btn { padding: 0.3rem 0.6rem; border: none; border-radius: 6px; background: transparent; color: var(--gray); font-size: 0.72rem; font-weight: 900; transition: all 0.25s; cursor: pointer; font-family: inherit; line-height: 1; }
+    .zoom-btn:hover { color: var(--white); background: rgba(255,255,255,0.07); }
+    .zoom-btn[aria-disabled="true"] { opacity: 0.25; pointer-events: none; }
+    .zoom-level { font-size: 0.72rem; font-weight: 700; color: var(--gray); min-width: 2.6rem; text-align: center; line-height: 1; display: flex; align-items: center; justify-content: center; }
 
     /* ── ABOUT HERO ── */
     #about-hero {
@@ -248,6 +255,70 @@
     .form-status.success { background:rgba(37,211,102,0.12); color:#4ade80; border:1px solid rgba(37,211,102,0.22); display:block; }
     .form-status.error { background:rgba(220,38,38,0.12); color:#f87171; border:1px solid rgba(220,38,38,0.22); display:block; }
     @media (max-width:520px) { .form-row{grid-template-columns:1fr} .modal-card{padding:1.75rem} }
+
+    /* ── ABOUT GATEWAY ── */
+    #about-gateway { background: var(--base); padding: 0 2rem 5rem; }
+    .about-gateway-wrap { max-width: 980px; margin: 0 auto; padding-top: 4rem; }
+    .section-heading {
+      font-size: clamp(1.35rem, 3vw, 1.8rem); font-weight: 700; text-align: center;
+      margin-bottom: 2rem; color: var(--white); font-family: 'Alef', sans-serif;
+    }
+    body.lang-en .section-heading { font-family: 'Inter', sans-serif; }
+    .section-heading::after {
+      content: ''; display: block; width: 3rem; height: 2px;
+      background: linear-gradient(90deg, var(--turquoise), var(--beige));
+      margin: 0.55rem auto 0; border-radius: 2px;
+    }
+    .gateway { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 880px; margin: 0 auto; }
+    [dir="rtl"] .gw-lectures { order: 1; }
+    [dir="rtl"] .gw-tech    { order: 2; }
+    .gateway-card {
+      position: relative; padding: 2.5rem 2rem 2.25rem; border-radius: 20px;
+      overflow: hidden; text-align: start;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border: 1px solid transparent;
+    }
+    .gateway-card:hover { transform: translateY(-7px); }
+    .gateway-card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      transition: opacity 0.4s; border-radius: 20px; pointer-events: none;
+    }
+    .gateway-card:hover::before { opacity: 1; }
+    .gw-lectures {
+      background: linear-gradient(150deg, #0f172a 0%, #1a1030 60%, #0f172a 100%);
+      border-color: rgba(155,42,64,0.32); box-shadow: 0 6px 40px rgba(0,0,0,0.5);
+    }
+    .gw-lectures:hover { box-shadow: 0 20px 70px rgba(155,42,64,0.22), 0 6px 40px rgba(0,0,0,0.5); }
+    .gw-lectures::before { background: radial-gradient(ellipse at top start, rgba(155,42,64,0.14), transparent 60%); }
+    .gw-tech {
+      background: linear-gradient(150deg, #08182e 0%, #0f2040 60%, #060e20 100%);
+      border-color: rgba(200,168,122,0.28); box-shadow: 0 6px 40px rgba(0,0,0,0.5);
+    }
+    .gw-tech:hover { box-shadow: 0 20px 70px rgba(200,168,122,0.18), 0 6px 40px rgba(0,0,0,0.5); }
+    .gw-tech::before { background: radial-gradient(ellipse at top start, rgba(200,168,122,0.12), transparent 60%); }
+    .card-pill {
+      display: inline-block; padding: 0.25rem 0.75rem; border-radius: 50px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .gw-lectures .card-pill { background: rgba(155,42,64,0.12); color: var(--wine-rose); border: 1px solid rgba(155,42,64,0.28); }
+    .gw-tech .card-pill     { background: rgba(200,168,122,0.12); color: var(--beige); border: 1px solid rgba(200,168,122,0.25); }
+    .card-heading { font-size: 1.25rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.75rem; }
+    .gw-lectures .card-heading { color: var(--wine-rose); }
+    .gw-tech .card-heading     { color: var(--beige-light); }
+    .card-body { font-size: 0.95rem; color: var(--gray); line-height: 1.75; margin-bottom: 1.75rem; }
+    .card-cta {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+      opacity: 0.55; transition: opacity 0.3s, gap 0.3s;
+    }
+    .gateway-card:hover .card-cta { opacity: 1; gap: 0.75rem; }
+    .gw-lectures .card-cta { color: var(--wine-rose); }
+    .gw-tech .card-cta     { color: var(--beige); }
+    @media (max-width: 600px) {
+      .gateway { grid-template-columns: 1fr; }
+      [dir="rtl"] .gw-lectures, [dir="rtl"] .gw-tech { order: unset; }
+    }
   </style>
 </head>
 <body class="lang-he">
@@ -277,6 +348,11 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="19.78" y1="4.22" x2="17.66" y2="6.34"/><line x1="6.34" y1="17.66" x2="4.22" y2="19.78"/></svg>
         <span data-i="themeToggle">מצב בהיר</span>
       </a>
+      <div class="zoom-toggle" title="גודל טקסט">
+        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט">−</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט">+</button>
+      </div>
       <div class="lang-toggle">
         <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
         <button class="lang-btn"        id="btnEn" onclick="setLang('en')">EN</button>
@@ -301,7 +377,7 @@
         <span class="about-pill" data-i="aboutPill">מאחורי המצפן</span>
         <h1 class="about-hero-name" data-i="aboutHeroName">ליטל אפרים</h1>
         <p class="about-hero-tagline" data-i="aboutHeroTagline">הדרך מתחילה בדיוק</p>
-        <p class="about-hero-intro" data-i="aboutHeroIntro">העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: הדיוק המחקרי והטכנולוגי, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.</p>
+        <p class="about-hero-intro" data-i="aboutHeroIntro">העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, <strong>והחוסן המנטלי האנושי</strong>. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.</p>
       </div>
 
     </div>
@@ -336,7 +412,7 @@
       <h2 class="about-section-h2 fade-up" data-i="aboutH2">ליטל אפרים, נעים להכיר!</h2>
 
       <div class="about-paragraphs">
-        <p class="about-paragraph fade-up" data-i="p1">העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.</p>
+        <p class="about-paragraph fade-up" data-i="p1">העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, <strong>והחוסן המנטלי האנושי</strong>. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.</p>
         <p class="about-paragraph fade-up" data-i="p2">את היכולת לצלול אל מרחבי ידע חדשים במהירות ולראות מערכות בצורה רחבה ומערכתית, גיבשתי במהלך <strong>שבע שנות שירות כעתודאית וקצינה בצה״ל</strong>. משם המשכתי להעמקת התשתית המדעית והמחקרית שלי, וכיום אני לקראת סיום <strong>תואר שני מחקרי (M.Sc) בתחום המיפוי והגיאו-אינפורמציה בטכניון</strong>.</p>
         <p class="about-paragraph fade-up" data-i="p3">בעולם הטכנולוגי, המומחיות שלי הינה בפיצוח משימות אלגוריתמיות, ביצוע מחקר יישומי וייעוץ תיאורטי חכם בעולמות ה-Spatial AI. החוזקה שלי טמונה בחיבור שבין הידע האקדמי הרחב שבראש לבין היכולת לתרגם אותו כיום למימוש מעשי ומהיר בעזרת <strong>כלי בינה מלאכותית מתקדמים</strong>. את הידע הזה אני מביאה איתי גם אל הבמה והכיתה, דרך הרצאות טכנולוגיות, קורסים והדרכות ייעודיות לחברות מיפוי וארגונים.</p>
         <p class="about-paragraph fade-up" data-i="p4">לצד העבודה האנליטית, מסע החיים האישי שלי עיצב בי <strong>חוסן נפשי ומנטלי בלתי מתפשר</strong>, מתוך התמודדות יומיומית ועיקשת עם פוסט-טראומה מורכבת שאינה ניתנת להעלמה. בעקבות הניסיון החי הזה, פיתחתי הבנה עמוקה של האתגרים השקופים המלווים את הנפש האנושית, ומצאתי את הכלים לנווט מתוך נקודות משבר ואי-ודאות אל עבר תפקוד שיא ומצוינות.</p>
@@ -346,6 +422,27 @@
 
       <div class="about-closing fade-up" data-i="aboutClosing">
         אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── מרחבי העשייה ── -->
+  <section id="about-gateway">
+    <div class="about-gateway-wrap">
+      <h2 class="section-heading" data-i="sectionServices">מרחבי עשייה</h2>
+      <div class="gateway">
+        <a href="lectures.html" class="gateway-card gw-lectures fade-up">
+          <span class="card-pill" data-i="pillLec">הרצאות</span>
+          <h2 class="card-heading" data-i="gwLecTitle">חוסן והשראה</h2>
+          <p class="card-body" data-i="gwLecBody">הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול</p>
+          <span class="card-cta" data-i="gwLecCta">גלה עוד ›</span>
+        </a>
+        <a href="technology.html" class="gateway-card gw-tech fade-up">
+          <span class="card-pill" data-i="pillTech">ליווי מקצועי</span>
+          <h2 class="card-heading" data-i="gwTechTitle">ייעוץ וטכנולוגיה</h2>
+          <p class="card-body" data-i="gwTechBody">מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים לתעשייה</p>
+          <span class="card-cta" data-i="gwTechCta">גלה עוד ›</span>
+        </a>
       </div>
     </div>
   </section>
@@ -381,6 +478,22 @@
   </footer>
 
   <script>
+  // ── FONT ZOOM ──
+  const ZOOM_STEPS = [75, 88, 100, 113, 130];
+  let currentZoomIdx = 2;
+  function applyZoom(idx) {
+    currentZoomIdx = Math.max(0, Math.min(ZOOM_STEPS.length - 1, idx));
+    document.documentElement.style.fontSize = ZOOM_STEPS[currentZoomIdx] + '%';
+    const out = document.getElementById('btnZoomOut');
+    const inn = document.getElementById('btnZoomIn');
+    if (out) out.setAttribute('aria-disabled', currentZoomIdx <= 0 ? 'true' : 'false');
+    if (inn) inn.setAttribute('aria-disabled', currentZoomIdx >= ZOOM_STEPS.length - 1 ? 'true' : 'false');
+    const lvl = document.getElementById('zoomLevel');
+    if (lvl) lvl.textContent = ZOOM_STEPS[currentZoomIdx] + '%';
+    localStorage.setItem('zoomIdx', currentZoomIdx);
+  }
+  function changeZoom(delta) { applyZoom(currentZoomIdx + delta); }
+
   const T = {
     he: {
       dir:'rtl', lang:'he', logo:'LOGO_HE_T.png',
@@ -388,16 +501,19 @@
       'nav-home':'ראשי','nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
       themeToggle:'מצב בהיר',
       aboutPill:'מאחורי המצפן', aboutHeroName:'ליטל אפרים', aboutHeroTagline:'הדרך מתחילה בדיוק',
-      aboutHeroIntro:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: הדיוק המחקרי והטכנולוגי, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
+      aboutHeroIntro:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, <strong>והחוסן המנטלי האנושי</strong>. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
       hl1:'שנות שירות כעתודאית וקצינה בצה״ל', hl2:'תואר שני מחקרי — מיפוי וגיאו-אינפורמציה, הטכניון', hl3:'בוגרת קורס דירקטורים — כי הדרך להובלת שינוי מתחילה בדיוק בנקודת המבט האסטרטגית',
       contentLabel:'הסיפור שלי', aboutH2:'ליטל אפרים, נעים להכיר!',
-      p1:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, והחוסן המנטלי האנושי. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
+      p1:'העשייה שלי מונעת מתוך זיקה עמוקה לשני עולמות המשלימים זה את זה: <strong>הדיוק המחקרי והטכנולוגי</strong>, <strong>והחוסן המנטלי האנושי</strong>. אני מאמינה שבין אם מדובר בפיצוח אתגר אלגוריתמי ובין אם בניווט מתוך מורכבות אישית – הדרך תמיד מתחילה בדיוק.',
       p2:'את היכולת לצלול אל מרחבי ידע חדשים במהירות ולראות מערכות בצורה רחבה ומערכתית, גיבשתי במהלך <strong>שבע שנות שירות כעתודאית וקצינה בצה״ל</strong>. משם המשכתי להעמקת התשתית המדעית והמחקרית שלי, וכיום אני לקראת סיום <strong>תואר שני מחקרי (M.Sc) בתחום המיפוי והגיאו-אינפורמציה בטכניון</strong>.',
       p3:'בעולם הטכנולוגי, המומחיות שלי הינה בפיצוח משימות אלגוריתמיות, ביצוע מחקר יישומי וייעוץ תיאורטי חכם בעולמות ה-Spatial AI. החוזקה שלי טמונה בחיבור שבין הידע האקדמי הרחב שבראש לבין היכולת לתרגם אותו כיום למימוש מעשי ומהיר בעזרת <strong>כלי בינה מלאכותית מתקדמים</strong>. את הידע הזה אני מביאה איתי גם אל הבמה והכיתה, דרך הרצאות טכנולוגיות, קורסים והדרכות ייעודיות לחברות מיפוי וארגונים.',
       p4:'לצד העבודה האנליטית, מסע החיים האישי שלי עיצב בי <strong>חוסן נפשי ומנטלי בלתי מתפשר</strong>, מתוך התמודדות יומיומית ועיקשת עם פוסט-טראומה מורכבת שאינה ניתנת להעלמה. בעקבות הניסיון החי הזה, פיתחתי הבנה עמוקה של האתגרים השקופים המלווים את הנפש האנושית, ומצאתי את הכלים לנווט מתוך נקודות משבר ואי-ודאות אל עבר תפקוד שיא ומצוינות.',
       p5:'את התובנות הללו אני מתרגמת לעשייה יישומית בשטח: החל מליווי מקצועי והענקת כלים לצוותי טיפול ושיקום, דרך הובלת תהליכי חוסן בארגונים, ועד להרצאות השראה ומנטורינג לבני נוער ולנשים השואפות והשואפים <strong>לפרוץ תקרות זכוכית ולהוביל מתוך נקודות פתיחה מורכבות</strong>.',
       p6:'השילוב הזה – בין החשיבה המחקרית וההדרכה הטכנולוגית לבין היכולת לפתח חוסן אנושי – הוא הערך המאוזן והאמיתי שאני מביאה איתי לכל מפגש, פרויקט או הרצאה.',
       aboutClosing:'אני מזמינה אתכם לנווט יחד איתי, ולמצוא את נקודת הציון המדויקת שלכם.',
+      sectionServices:'מרחבי עשייה',
+      pillLec:'הרצאות', gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול', gwLecCta:'גלה עוד ›',
+      pillTech:'ליווי מקצועי', gwTechTitle:'ייעוץ וטכנולוגיה', gwTechBody:'מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים לתעשייה', gwTechCta:'גלה עוד ›',
       contactH2:'בואו נדבר', contactDesc:'מחפשים הרצאה מעוררת השראה לארגון, פתרון טכנולוגי מתקדם, או פשוט רוצים לשמוע עוד?', contactCta:'צרו קשר', contactWa:'WhatsApp',
       waUrl:'https://wa.me/972559894650?text=היי%20ליטל%2C%20אשמח%20לשמוע%20עוד%20פרטים',
       modalTitle:'בואו נדבר', modalSubtitle:'השאירו פרטים ואחזור אליכם בהקדם',
@@ -427,6 +543,9 @@
       p5:'I translate these insights into practical field work: from mentoring therapeutic teams, to leading organizational resilience processes, to inspirational talks and mentoring for youth and women aspiring to <strong>break glass ceilings and lead from complex starting points</strong>.',
       p6:'This combination — analytical thinking, technological guidance, and the ability to cultivate human resilience — is the authentic value I bring to every meeting, project, or lecture.',
       aboutClosing:'I invite you to navigate together with me, and find your precise coordinates.',
+      sectionServices:'Areas of Practice',
+      pillLec:'Lectures', gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists', gwLecCta:'Explore ›',
+      pillTech:'Professional Consulting', gwTechTitle:'Consulting & Technology', gwTechBody:'Geographic mapping, AI, computer vision and spatial data processing for industry', gwTechCta:'Explore ›',
       contactH2:"Let's Talk", contactDesc:'Looking for an inspiring lecture, an advanced technology solution, or just want to learn more?', contactCta:'Get in Touch', contactWa:'WhatsApp',
       waUrl:"https://wa.me/972559894650?text=Hi%20Lital%2C%20I'd%20love%20to%20hear%20more%20details",
       modalTitle:"Let's Talk", modalSubtitle:"Leave your details and I'll get back to you soon",
@@ -484,6 +603,8 @@
   document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('lang') || 'he';
     setLang(saved); requestAnimationFrame(initObs);
+    const savedZoom = parseInt(localStorage.getItem('zoomIdx') ?? '2', 10);
+    applyZoom(isNaN(savedZoom) ? 2 : savedZoom);
   });
 
   function openModal(subject) {

@@ -386,7 +386,7 @@
     @media (max-width:520px) { .form-row{grid-template-columns:1fr} .modal-card{padding:1.75rem} }
 
     /* ── ZOOM TOGGLE ── */
-    .zoom-toggle { display: flex; gap: 0.15rem; background: rgba(0,0,0,0.06); border-radius: 8px; padding: 0.25rem; }
+    .zoom-toggle { display: flex; gap: 0.15rem; background: rgba(0,0,0,0.06); border-radius: 8px; padding: 0.25rem; direction: ltr; }
     .zoom-btn {
       padding: 0.3rem 0.6rem; border: none; border-radius: 6px;
       background: transparent; color: var(--gray);
@@ -395,6 +395,7 @@
     }
     .zoom-btn:hover { color: var(--text); background: rgba(0,0,0,0.07); }
     .zoom-btn[aria-disabled="true"] { opacity: 0.25; pointer-events: none; }
+    .zoom-level { font-size: 0.72rem; font-weight: 700; color: var(--gray); min-width: 2.6rem; text-align: center; line-height: 1; display: flex; align-items: center; justify-content: center; }
 
     /* ── HERO SERVICES ── */
     .hero-services {
@@ -449,8 +450,9 @@
     <div style="display:flex;align-items:center;gap:0.75rem">
       <button class="theme-toggle" onclick="localStorage.setItem('theme','dark');location.reload()"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span data-i="themeToggle">מצב כהה</span></button>
       <div class="zoom-toggle" title="גודל טקסט">
-        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט" data-i="zoomOut">א−</button>
-        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט" data-i="zoomIn">א+</button>
+        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט">−</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט">+</button>
       </div>
       <div class="lang-toggle">
         <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
@@ -495,7 +497,7 @@
           <span class="card-pill" data-i="pillAbout">בקצרה</span>
           <h2 class="card-heading" data-i="gwAboutTitle">מאחורי המצפן</h2>
           <p class="card-body" data-i="gwAboutBody">ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.</p>
-          <span class="card-cta" data-i="gwAboutCta">קרא עוד ›</span>
+          <span class="card-cta" data-i="gwAboutCta">גלה עוד ›</span>
         </div>
       </a>
     </div>
@@ -584,6 +586,8 @@
     const inn = document.getElementById('btnZoomIn');
     if (out) out.setAttribute('aria-disabled', currentZoomIdx <= 0 ? 'true' : 'false');
     if (inn) inn.setAttribute('aria-disabled', currentZoomIdx >= ZOOM_STEPS.length - 1 ? 'true' : 'false');
+    const lvl = document.getElementById('zoomLevel');
+    if (lvl) lvl.textContent = ZOOM_STEPS[currentZoomIdx] + '%';
     localStorage.setItem('zoomIdx', currentZoomIdx);
   }
   function changeZoom(delta) { applyZoom(currentZoomIdx + delta); }
@@ -595,8 +599,8 @@
       heroName:'ליטל אפרים', heroTagline:'הדרך מתחילה בדיוק',
       heroServices:'אסטרטגיה מרחבית ✦ בינה מלאכותית גיאוגרפית ✦ הרצאות חוסן והשראה',
       'nav-about':'מי אני','nav-lectures':'חוסן והשראה','nav-tech':'ייעוץ וטכנולוגיה','nav-contact':'צור קשר',
-      themeToggle:'מצב כהה', zoomOut:'א−', zoomIn:'א+',
-      pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'קרא עוד ›',
+      themeToggle:'מצב כהה',
+      pillAbout:'בקצרה', gwAboutTitle:'מאחורי המצפן', gwAboutBody:'ליטל אפרים, נעים להכיר! העשייה שלי נעה תמיד בין שני קטבים המשלימים זה את זה: חשיבה מחקרית ואלגוריתמית בעולמות ה-Spatial AI, ולצידה – חוסן מנטלי עמוק שצמח מתוך מסע חיים והתמודדות יומיומית עם מורכבות אישית.', gwAboutCta:'גלה עוד ›',
       pillLec:'הרצאות', pillTech:'ליווי מקצועי',
       gwLecTitle:'חוסן והשראה', gwLecBody:'הרצאות מעוררות השראה עם כלים מעשיים לחוסן, לארגונים, אנשי חינוך ואנשי טיפול', gwLecCta:'גלה עוד ›',
       gwTechTitle:'ייעוץ וטכנולוגיה', gwTechBody:'מיפוי גיאוגרפי, בינה מלאכותית, ראייה ממוחשבת ועיבוד נתונים מרחביים לתעשייה', gwTechCta:'גלה עוד ›',
@@ -624,7 +628,7 @@
       heroName:'Lital Efraim', heroTagline:'The Journey Begins with Precision',
       heroServices:'Spatial Strategy ✦ Geographic AI ✦ Resilience & Inspiration',
       'nav-about':'About Me','nav-lectures':'Resilience & Inspiration','nav-tech':'Consulting & Technology','nav-contact':'Contact',
-      themeToggle:'Dark Mode', zoomOut:'a−', zoomIn:'a+',
+      themeToggle:'Dark Mode',
       pillAbout:'About Me', gwAboutTitle:'Behind the Compass', gwAboutBody:'Lital Efraim, nice to meet you! My work moves between two complementary poles: research and algorithmic thinking in the Spatial AI world, alongside deep mental resilience born from a life journey and daily coping with personal complexity.', gwAboutCta:'Read more ›',
       pillLec:'Lectures', pillTech:'Professional Guidance',
       gwLecTitle:'Resilience & Inspiration', gwLecBody:'Inspiring lectures with practical resilience tools for organizations, educators and therapists', gwLecCta:'Explore ›',

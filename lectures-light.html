@@ -75,6 +75,13 @@
     }
     .theme-toggle:hover { color: var(--text); border-color: rgba(0,0,0,0.25); }
 
+    /* ── ZOOM TOGGLE ── */
+    .zoom-toggle { display: flex; gap: 0.15rem; background: rgba(0,0,0,0.06); border-radius: 8px; padding: 0.25rem; direction: ltr; }
+    .zoom-btn { padding: 0.3rem 0.6rem; border: none; border-radius: 6px; background: transparent; color: var(--gray); font-size: 0.72rem; font-weight: 900; transition: all 0.25s; cursor: pointer; font-family: inherit; line-height: 1; }
+    .zoom-btn:hover { color: var(--text); background: rgba(0,0,0,0.07); }
+    .zoom-btn[aria-disabled="true"] { opacity: 0.25; pointer-events: none; }
+    .zoom-level { font-size: 0.72rem; font-weight: 700; color: var(--gray); min-width: 2.6rem; text-align: center; line-height: 1; display: flex; align-items: center; justify-content: center; }
+
     .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
     .hamburger span { display: block; width: 22px; height: 2px; background: var(--gray); border-radius: 2px; }
     .mobile-menu {
@@ -323,6 +330,11 @@
     </ul>
     <div style="display:flex;align-items:center;gap:0.75rem">
       <a href="lectures.html" class="theme-toggle" onclick="localStorage.setItem('theme','dark')"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> <span data-i="themeToggle">מצב כהה</span></a>
+      <div class="zoom-toggle" title="גודל טקסט">
+        <button class="zoom-btn" id="btnZoomOut" onclick="changeZoom(-1)" aria-label="הקטן טקסט">−</button>
+        <span class="zoom-level" id="zoomLevel">100%</span>
+        <button class="zoom-btn" id="btnZoomIn"  onclick="changeZoom(+1)" aria-label="הגדל טקסט">+</button>
+      </div>
       <div class="lang-toggle">
         <button class="lang-btn active" id="btnHe" onclick="setLang('he')">עב</button>
         <button class="lang-btn"        id="btnEn" onclick="setLang('en')">EN</button>
@@ -423,6 +435,22 @@
   </footer>
 
   <script>
+  // ── FONT ZOOM ──
+  const ZOOM_STEPS = [75, 88, 100, 113, 130];
+  let currentZoomIdx = 2;
+  function applyZoom(idx) {
+    currentZoomIdx = Math.max(0, Math.min(ZOOM_STEPS.length - 1, idx));
+    document.documentElement.style.fontSize = ZOOM_STEPS[currentZoomIdx] + '%';
+    const out = document.getElementById('btnZoomOut');
+    const inn = document.getElementById('btnZoomIn');
+    if (out) out.setAttribute('aria-disabled', currentZoomIdx <= 0 ? 'true' : 'false');
+    if (inn) inn.setAttribute('aria-disabled', currentZoomIdx >= ZOOM_STEPS.length - 1 ? 'true' : 'false');
+    const lvl = document.getElementById('zoomLevel');
+    if (lvl) lvl.textContent = ZOOM_STEPS[currentZoomIdx] + '%';
+    localStorage.setItem('zoomIdx', currentZoomIdx);
+  }
+  function changeZoom(delta) { applyZoom(currentZoomIdx + delta); }
+
   const T = {
     he: {
       dir:'rtl', lang:'he', logo:'LOGO_HE_T.png',
@@ -609,6 +637,8 @@
     const saved = localStorage.getItem('lang') || 'he';
     setLang(saved);
     requestAnimationFrame(initObs);
+    const savedZoom = parseInt(localStorage.getItem('zoomIdx') ?? '2', 10);
+    applyZoom(isNaN(savedZoom) ? 2 : savedZoom);
   });
 
   // ── MODAL ──
